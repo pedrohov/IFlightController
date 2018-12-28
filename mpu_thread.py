@@ -25,7 +25,9 @@ class MPU(Thread):
             print("MPU 6050");
             previousTime = now;
             now = time.time();
-
+            
+            self.accel = self.getAccelData();
+            self.gyro  = self.getGyroData();
             self.accAngle = self.calcAccAngle();
 
             print("AcX: " + str(self.accAngle['x']));
@@ -43,22 +45,26 @@ class MPU(Thread):
 
 
     def getAccelData(self):
-        self.accel = self.mpu.get_accel_data();
-        self.parseAccelData();
+        accel = self.mpu.get_accel_data();
+        accel = self.parseAccelData(accel);
+        return accel;
 
     def getGyroData(self):
-        self.gyro  = self.mpu.get_gyro_data();
-        self.parseGyroData();
+        gyro = self.mpu.get_gyro_data();
+        gyro = self.parseGyroData(gyro);
+        return gyro;
 
-    def parseAccelData(self):
-        self.accel['x'] = self.accel['x'] / 16384.0;
-        self.accel['y'] = self.accel['y'] / 16384.0;
-        self.accel['z'] = self.accel['z'] / 16384.0;
+    def parseAccelData(self, data):
+        data['x'] = data['x'] / 16384.0;
+        data['y'] = data['y'] / 16384.0;
+        data['z'] = data['z'] / 16384.0;
+        return data;
 
-    def parseGyroData(self):
-        self.gyro['x'] = self.gyro['x'] / 131.0;
-        self.gyro['y'] = self.gyro['y'] / 131.0;
-        self.gyro['z'] = self.gyro['z'] / 131.0;
+    def parseGyroData(self, data):
+        data['x'] = data['x'] / 131.0;
+        data['y'] = data['y'] / 131.0;
+        data['z'] = data['z'] / 131.0;
+        return data;
 
     def calcAccAngle(self):
         accAngle = {};
@@ -70,13 +76,13 @@ class MPU(Thread):
         return math.sqrt((a*a) + (b*b));
 
     def getYrotation(self, x, y, z):
-        radians = math.atan2(x, dist(y, z));
+        radians = math.atan2(x, self.dist(y, z));
         return math.degrees(radians);
         
     def getXrotation(self, x, y, z):
-        radians = math.atan2(y, dist(x, z));
+        radians = math.atan2(y, self.dist(x, z));
         return math.degrees(radians);
 
 if __name__ == "__main__":
-    mpu = self.MPU(0x68);
+    mpu = MPU(0x68);
     mpu.run();
