@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Controller</title>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Flight " />
+		<meta name="keywords" content="wifi, controller" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/controller-ss.css"/>
+	</head>
+
+	<body>
+		<!-- Canvas element for the joysticks  -->
+		<canvas id="controllers" width="500" height="230"></canvas>
+
+		<div class="container">
+			<div class="header">
+				<h2>CONTROLLER</h2>
+				<div class="info info-header disconnected" id="con-status">
+					<i class="fa fa-wifi" aria-hidden="true"></i>
+					<span class="info-caption" id="con-status-txt">Disconnected.</span>
+				</div>
+				<!--<div class="info info-header">
+					<i class="fa fa-battery-full" aria-hidden="true"></i>
+					<span class="info-caption">Battery.</span>
+				</div>-->
+
+				<div class="buttons">
+					<div class="c-btn" id="connect">CONNECT</div>
+				</div>
+			</div>
+
+			<!--  -->
+			<div class="info-container">
+				<div class="info">
+					<i class="fa fa-plane" aria-hidden="true"></i>
+					<span class="info-caption">Height: </span>
+					<span class="info-value">Teste</span>
+				</div>
+				<div class="info">
+					<i class="fa fa-thermometer-half" aria-hidden="true"></i>
+					<span class="info-caption">Temperature: </span>
+					<span class="info-value">Teste</span>
+				</div>
+				<div class="info">
+					<i class="fa fa-compass" aria-hidden="true"></i>
+					<span class="info-caption">Orientation: </span>
+				</div>
+				<div class="info">
+					<span class="info-caption">X: </span>
+					<span class="info-value">x</span>
+				</div>
+				<div class="info">
+					<span class="info-caption">Y: </span>
+					<span class="info-value">y</span>
+				</div>
+				<div class="info">
+					<span class="info-caption">Z: </span>
+					<span class="info-value">z</span>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<script src="js/controls/Controller.js"></script>
+		<script src="js/controls/Knob.js"></script>
+		<script src="js/controls/FlightController.js"></script>
+		<script src="js/controls/main.js"></script>
+	</body>
+</html>
