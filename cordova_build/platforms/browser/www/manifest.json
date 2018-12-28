@@ -1,0 +1,12 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "IFlightController",
+  "short_name": "IFlightController",
+  "version": "com.iflightcontroller",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "author": "Apache Cordova Team",
+  "icons": [],
+  "orientation": "landscape",
+  "start_url": "index.html"
+}
