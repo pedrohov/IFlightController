@@ -11,8 +11,7 @@ class App(Thread):
         
         super(App, self).__init__();
         
-        # MPU6050:
-        self.now = time.time();
+        # Motor speed:
         self.vel = 1000;
         
         # Set up BCM GPIO numbering:
@@ -25,9 +24,13 @@ class App(Thread):
         self.motorAH2 = 26;
 
         # Connect to pigpio:
+        os.system("sudo pigpiod"); # Start pigpio daemon.
         self.pi = pigpio.pi();
         
-        # Calibrate ESC:
+        # Calibrate ESCs:
+        #self.calibrate();
+    
+    def calibrate(self):
         self.pi.set_servo_pulsewidth(self.motorH1, 2000);
         self.pi.set_servo_pulsewidth(self.motorH2, 2000);
         self.pi.set_servo_pulsewidth(self.motorAH1, 2000);
@@ -49,9 +52,6 @@ class App(Thread):
     def run(self):
         
         while(True):
-            previousTime = self.now;
-            self.now     = time.time();
-            
             # Value between 500~2500:
             print("Current speed: " + str(self.vel));
             try:
@@ -72,7 +72,6 @@ class App(Thread):
         GPIO.cleanup();
 
 if __name__ == "__main__":
-    
     app = App();
     app.start();
     

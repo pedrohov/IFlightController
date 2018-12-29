@@ -3,16 +3,21 @@ from threading import Thread;
 import math;
 import time;
 
+PITCH = 'x';
+ROLL  = 'y';
+YAW   = 'z';
+
 class MPU(Thread):
     def __init__(self, reg):
-        super(MPU, self).__init__();
+        
+        Thread.__init__(self);
 
         self.mpu   = mpu6050(reg);
         self.accel = self.getAccelData();
         self.gyro  = self.getGyroData();
 
         # Real angle:
-        self.angle = {'x': 0, 'y': 0};
+        self.angle = {PITCH: 0, ROLL: 0};
 
         # Calculate the angle given accelerometer data.
         # The parsed gyro data is already given in degrees:
@@ -30,18 +35,18 @@ class MPU(Thread):
             self.gyro  = self.getGyroData();
             self.accAngle = self.calcAccAngle();
 
-            print("AcX: " + str(self.accAngle['x']));
-            print("AcY: " + str(self.accAngle['y']));
-            print("GyX: " + str(self.gyro['x']));
-            print("GyY: " + str(self.gyro['y']));
+            print("AcX: " + str(self.accAngle[PITCH]));
+            print("AcY: " + str(self.accAngle[ROLL]));
+            print("GyX: " + str(self.gyro[PITCH]));
+            print("GyY: " + str(self.gyro[ROLL]));
             
             elapsedTime = now - previousTime;
 
-            self.angle['x'] = 0.98 * (self.angle['x'] + self.gyro['x'] * elapsedTime) + 0.02 * self.accAngle['x'];
-            self.angle['y'] = 0.98 * (self.angle['y'] + self.gyro['y'] * elapsedTime) + 0.02 * self.accAngle['y'];
+            self.angle[PITCH] = 0.98 * (self.angle[PITCH] + self.gyro[PITCH] * elapsedTime) + 0.02 * self.accAngle[PITCH];
+            self.angle[ROLL] = 0.98 * (self.angle[ROLL] + self.gyro[ROLL] * elapsedTime) + 0.02 * self.accAngle[ROLL];
 
-            print("x: " + str(self.angle['x']));
-            print("y: " + str(self.angle['y']));
+            print("PITCH: " + str(self.angle[PITCH]));
+            print("ROLL: " + str(self.angle[ROLL]));
 
 
     def getAccelData(self):
@@ -55,25 +60,25 @@ class MPU(Thread):
         return gyro;
 
     def parseAccelData(self, data):
-        data['x'] = data['x'] / 16384.0;
-        data['y'] = data['y'] / 16384.0;
-        data['z'] = data['z'] / 16384.0;
+        data[PITCH] = data['x'] / 16384.0;
+        data[ROLL] = data['y'] / 16384.0;
+        data[YAW] = data['z'] / 16384.0;
         return data;
 
     def parseGyroData(self, data):
-        data['x'] = data['x'] / 131.0;
-        data['y'] = data['y'] / 131.0;
-        data['z'] = data['z'] / 131.0;
+        data[PITCH] = data['x'] / 131.0;
+        data[ROLL] = data['y'] / 131.0;
+        data[YAW] = data['z'] / 131.0;
         return data;
 
     def calcAccAngle(self):
         accAngle = {};
-        accAngle['x'] = self.getXrotation(self.accel['x'], self.accel['y'], self.accel['z']);
-        accAngle['y'] = self.getYrotation(self.accel['x'], self.accel['y'], self.accel['z']);
+        accAngle[PITCH] = self.getXrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
+        accAngle[ROLL] = self.getYrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
         return accAngle;
 
     def dist(self, a, b):
-        return math.sqrt((a*a) + (b*b));
+        return math.sqrt((a * a) + (b * b));
 
     def getYrotation(self, x, y, z):
         radians = math.atan2(x, self.dist(y, z));
