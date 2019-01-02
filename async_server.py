@@ -52,5 +52,5 @@ class Receiver():
         return msg;
         
 if __name__ == '__main__':
-    receiver = Receiver('localhost', 8080);
+    receiver = Receiver('', 8080);
     receiver.start();

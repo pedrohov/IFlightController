@@ -1,4 +1,4 @@
-from mpu6050 import mpu6050;
+from mpu6050   import mpu6050;
 from threading import Thread;
 import math;
 import time;
@@ -28,27 +28,24 @@ class MPU(Thread):
         now = time.time();
 
         while(True):
-            print("MPU 6050");
             previousTime = now;
             now = time.time();
             
             self.accel = self.getAccelData();
             self.gyro  = self.getGyroData();
             self.accAngle = self.calcAccAngle();
-
-            print("AcX: " + str(self.accAngle[PITCH]));
-            print("AcY: " + str(self.accAngle[ROLL]));
-            print("GyX: " + str(self.gyro[PITCH]));
-            print("GyY: " + str(self.gyro[ROLL]));
-            
+           
             elapsedTime = now - previousTime;
 
             self.angle[PITCH] = 0.98 * (self.angle[PITCH] + self.gyro[PITCH] * elapsedTime) + 0.02 * self.accAngle[PITCH];
             self.angle[ROLL] = 0.98 * (self.angle[ROLL] + self.gyro[ROLL] * elapsedTime) + 0.02 * self.accAngle[ROLL];
 
-            print("PITCH: " + str(self.angle[PITCH]));
-            print("ROLL: " + str(self.angle[ROLL]));
+            self.debug();
 
+    def debug(self):
+        print("MPU 6050");
+        print("PITCH: " + str(self.angle[PITCH]));
+        print("ROLL: " + str(self.angle[ROLL]));
 
     def getAccelData(self):
         accel = self.mpu.get_accel_data();
