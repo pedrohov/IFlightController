@@ -12,7 +12,7 @@ class App(Thread):
         super(App, self).__init__();
         
         # Motor speed:
-        self.vel = 1000;
+        self.spd = 1000;
         
         # Set up BCM GPIO numbering:
         GPIO.setmode(GPIO.BCM);
@@ -42,18 +42,18 @@ class App(Thread):
         self.pi.set_servo_pulsewidth(self.motorAH2, 1000);
         time.sleep(2);
     
-    def setVelocidade(self, valor):
-        self.vel = valor;
-        self.pi.set_servo_pulsewidth(self.motorH1 , self.vel);
-        self.pi.set_servo_pulsewidth(self.motorH2 , self.vel);
-        self.pi.set_servo_pulsewidth(self.motorAH1, self.vel);
-        self.pi.set_servo_pulsewidth(self.motorAH2, self.vel);
+    def setSpeed(self, valor):
+        self.spd = valor;
+        self.pi.set_servo_pulsewidth(self.motorH1 , self.spd);
+        self.pi.set_servo_pulsewidth(self.motorH2 , self.spd);
+        self.pi.set_servo_pulsewidth(self.motorAH1, self.spd);
+        self.pi.set_servo_pulsewidth(self.motorAH2, self.spd);
     
     def run(self):
         
         while(True):
             # Value between 500~2500:
-            print("Current speed: " + str(self.vel));
+            print("Current speed: " + str(self.spd));
             try:
                 valor = int(input("Set speed: "));
                 if(valor == "-1"):
@@ -61,7 +61,7 @@ class App(Thread):
             except:
                 break;
             
-            self.setVelocidade(int(valor));
+            self.setSpeed(int(valor));
         
         # Cleanup:
         self.pi.set_servo_pulsewidth(self.motorH1 , 0);

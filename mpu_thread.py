@@ -3,9 +3,10 @@ from threading import Thread;
 import math;
 import time;
 
-PITCH = 'x';
-ROLL  = 'y';
-YAW   = 'z';
+PITCH    = 'x';
+ROLL     = 'y';
+YAW      = 'z';
+THROTTLE = 'T';
 
 class MPU(Thread):
     def __init__(self, reg):

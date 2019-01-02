@@ -1,4 +1,4 @@
-//var piAddress = "192.168.0.104";
+//var piAddress = "192.168.0.104"; // Raspberry pi's IP address
 var piAddress = "localhost";
 var piPort    = "8080";
 
