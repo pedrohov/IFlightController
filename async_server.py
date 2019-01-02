@@ -33,5 +33,5 @@ class Receiver():
                 continue;
         
 if __name__ == '__main__':
-    receiver = Receiver('', 8080);
+    receiver = Receiver('localhost', 8080);
     receiver.start();

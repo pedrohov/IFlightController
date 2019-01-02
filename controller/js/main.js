@@ -1,11 +1,15 @@
+//var piAddress = "192.168.0.104";
+var piAddress = "localhost";
+var piPort    = "8080";
+
 // Main code, executed once the app finishes loading:
 $(document).ready(function() {
 
     // Get canvas and its 2d context:
     let canvas  = document.getElementById("controllers");
 
-    //let connection = new WebSocket("ws:192.168.0.101:8080");
-    let connection = new WebSocket("ws:localhost:8080");
+    // Create and open a new websocket:
+    let connection = new WebSocket("ws:" + piAddress + ":" + piPort);
 
     // Resize the canvas width to fit entire screen:
     canvas.width  = window.innerWidth;
