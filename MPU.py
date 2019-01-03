@@ -40,12 +40,10 @@ class MPU(Thread):
             self.angle[PITCH] = 0.98 * (self.angle[PITCH] + self.gyro[PITCH] * elapsedTime) + 0.02 * self.acc_angle[PITCH];
             self.angle[ROLL]  = 0.98 * (self.angle[ROLL] + self.gyro[ROLL] * elapsedTime) + 0.02 * self.acc_angle[ROLL];
 
-            self.debug();
+            print(self);
 
-    def debug(self):
-        print("MPU 6050");
-        print("PITCH: " + str(self.angle[PITCH]));
-        print("ROLL: " + str(self.angle[ROLL]));
+    def __str__(self):
+        return "MPU 6050\nPITCH: " + str(self.angle[PITCH]) + "\nROLL: " +  str(self.angle[ROLL]);
 
     def getAccelData(self):
         accel = self.mpu.get_accel_data();

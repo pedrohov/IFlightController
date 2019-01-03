@@ -1,48 +1,25 @@
-/* #525564 #74828F #96C0CE #BEB9B5 #C25B56 #FEF6EB */
+/* Color Palette: #525564 #74828F #96C0CE #BEB9B5 #C25B56 #FEF6EB */
 
 html, body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 	background-color: #525564;
 	font-family: 'Lato', sans-serif;
 }
 
-.col {
-	margin: 0;
-	padding: 0;
-}
-
-.container {
-	margin: 0;
-	padding: 0;
+.header {
+    color: #fff;
 }
 
 h2 {
-	color: #fff;
 	margin: 20px 0 -20px 20px;
 }
 
 .info-header {
-	margin: 20px 0 0 20px;
+	margin: 30px 0 0 20px;
 }
 
-.info-container {
-	position: absolute;
-	left: 0; 
-	right: 0; 
-	margin-left: auto; 
-	margin-right: auto;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 180px;
-}
-
-.info {
-	color: #fff;
-	z-index: 100;
-}
-
-.info i {
+.info-header i {
 	width: 22px;
 }
 
@@ -62,34 +39,6 @@ canvas {
 	position: absolute;
 	top: 50%;
     left: 50%;
-}
-
-.joystick {
-	display: table-cell;
-	width: 200px;
-	height: 200px;
-	border-radius: 50%;
-	background-color: #96C0CE;
-	position: relative;
-	vertical-align: middle;
-}
-
-.joystick-fill {
-	width: 170px;
-	height: 170px;
-	border-radius: 50%;
-	background-color: #74828F;
-	margin: auto;
-	border: 5px solid #525564;
-	position: relative;
-}
-
-.joystick-knob {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	background-color: #96C0CE;
-	margin: auto;
 }
 
 .c-btn {

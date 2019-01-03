@@ -60,7 +60,7 @@ $(document).ready(function() {
         var x = (e.pageX || e.clientX) - canvas.getBoundingClientRect().left;
         var y = (e.pageY || e.clientY) - canvas.getBoundingClientRect().top;
 
-        // Check if the mouse dragged a knob and update the knob position:
+        // Check if the mouse dragged a knob, update the knob position:
         let changed = flightController.moveControllers(x, y);
 
         // Only send new status message if the controller changed state:
