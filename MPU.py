@@ -22,7 +22,7 @@ class MPU(Thread):
 
         # Calculate the angle given accelerometer data.
         # The parsed gyro data is already given in degrees:
-        self.accAngle = self.calcAccAngle();
+        self.acc_angle = self.calcAccAngle();
 
     def run(self):
         now = time.time();
@@ -31,14 +31,14 @@ class MPU(Thread):
             previousTime = now;
             now = time.time();
             
-            self.accel = self.getAccelData();
-            self.gyro  = self.getGyroData();
-            self.accAngle = self.calcAccAngle();
+            self.accel     = self.getAccelData();
+            self.gyro      = self.getGyroData();
+            self.acc_angle = self.calcAccAngle();
            
             elapsedTime = now - previousTime;
 
-            self.angle[PITCH] = 0.98 * (self.angle[PITCH] + self.gyro[PITCH] * elapsedTime) + 0.02 * self.accAngle[PITCH];
-            self.angle[ROLL] = 0.98 * (self.angle[ROLL] + self.gyro[ROLL] * elapsedTime) + 0.02 * self.accAngle[ROLL];
+            self.angle[PITCH] = 0.98 * (self.angle[PITCH] + self.gyro[PITCH] * elapsedTime) + 0.02 * self.acc_angle[PITCH];
+            self.angle[ROLL]  = 0.98 * (self.angle[ROLL] + self.gyro[ROLL] * elapsedTime) + 0.02 * self.acc_angle[ROLL];
 
             self.debug();
 
@@ -70,10 +70,10 @@ class MPU(Thread):
         return data;
 
     def calcAccAngle(self):
-        accAngle = {};
-        accAngle[PITCH] = self.getXrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
-        accAngle[ROLL] = self.getYrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
-        return accAngle;
+        acc_angle = {};
+        acc_angle[PITCH] = self.getXrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
+        acc_angle[ROLL] = self.getYrotation(self.accel[PITCH], self.accel[ROLL], self.accel[YAW]);
+        return acc_angle;
 
     def dist(self, a, b):
         return math.sqrt((a * a) + (b * b));

@@ -1,5 +1,5 @@
-//var piAddress = "192.168.0.104"; // Raspberry pi's IP address
-var piAddress = "localhost";
+var piAddress = "192.168.0.101"; // Raspberry pi's IP address
+//var piAddress = "localhost";
 var piPort    = "8080";
 
 // Main code, executed once the app finishes loading:
