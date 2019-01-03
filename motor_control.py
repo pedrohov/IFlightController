@@ -24,7 +24,6 @@ class MotorControl():
         GPIO.setmode(GPIO.BCM);
 
         # Connect to pigpio:
-        #os.system("sudo pigpiod"); # Start pigpio daemon.
         self.pi = pigpio.pi();
 
         # Calibrate ESCs:

@@ -81,36 +81,34 @@ class FlightController(Thread):
             elapsed_time = now - previous_time;
             pitch_PID = self.pitch_PID.PID(self.setpoint[PITCH], self.MPU.angle[PITCH], elapsed_time);
             
-            # Calculate the actual PITCH speed (Throttle + PID):
-            # speed = self.setpoint[THROTTLE] + pitch_PID;
-            # print('PITCH SPD: ' + str(speed));
-            
-            # Define motor speed for the PITCH:
-            # self.controller.setSpeed(speed, CCW1);
-            # self.controller.setSpeed(speed, CCW2);
-            
             # Calculate the ROLL PID:
             now = time.time();
             elapsed_time = now - previous_time;
             roll_PID = self.roll_PID.PID(self.setpoint[PITCH], self.MPU.angle[PITCH], elapsed_time);
 
-            # Calculate the actual  speed (Throttle + PID):
-            # speed = self.setpoint[THROTTLE] + roll_PID;
-            # print('ROLL SPD: ' + str(speed));
-
-            # Define motor speed for the ROLL:
-            # self.controller.setSpeed(speed, CW1);
-            # self.controller.setSpeed(speed, CW2);
-
             # Calculate the YAW PID [NOT IMPLEMENTED]:
             yaw_PID = 0;
+            
+            self.setMotorsSpeed(self.setpoint[THROTTLE], pitch_PID, roll_PID, yaw_PID);
 
         # Clean dead ends before ending:
         # self.controller.cleanup();
 
-    def setMotorsSpeed(self):
+    def setMotorsSpeed(self, throttle, pitch, roll, yaw):
         if(QUAD_CONFIG == X_CONFIG):
-            pass;
+            
+            # CW1  = Throttle + Pitch + Roll - Yaw
+            # CCW1 = Throttle + Pitch - Roll + Yaw
+            spd = throttle + pitch + roll - yaw;
+            self.controller.setSpeed(spd, CW1_MOTOR);
+            spd = throttle + pitch - roll + yaw;
+            self.controller.setSpeed(spd, CW2_MOTOR);
+            # CW2  = Throttle - Pitch + Roll - Yaw
+            # CCW2 = Throttle - Pitch - Roll + Yaw
+            spd = throttle - pitch + roll - yaw;
+            self.controller.setSpeed(spd, CCW1_MOTOR);
+            spd = throttle - pitch - roll + yaw;
+            self.controller.setSpeed(spd, CCW2_MOTOR);
         elif(QUAD_CONFIG == PLUS_CONFIG):
             pass;
 
