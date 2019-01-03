@@ -15,8 +15,11 @@ class PIDcontroller():
         self.kI = kI;
         self.kD = kD;
         
-        # Previous error:
+        # Previous error, used for the derivate:
         self.previous_error = 0;
+
+        # Sum of previous errors, used for the integral:
+        self.sum_error = 0;
         
     def PID(self, setpoint, process_var, elapsed_time):
         
@@ -28,10 +31,8 @@ class PIDcontroller():
         
         # Integrate the value of the error, sum of the previous
         # integral part plus the error multiplied by its constant.
-        # The integral part will only act when the error is close
-        # to the setpoint (+- 3 degrees):
-        # if(error > -3) and (error < 3):
-        self.I = self.I + (self.kI * error);
+        self.sum_error += error;
+        self.I = self.sum_error + self.kI;
         
         # The derivate is the value of the error given in the amount
         # of time passed since the last iteration:
@@ -40,12 +41,5 @@ class PIDcontroller():
         
         # The PID value is the sum of each part:
         PID = self.P + self.I + self.D;
-        
-        # Treat the PID value so it isn't bigger than 2000us and
-        # less than 1000us (MAX and MIN calibrated for the ESCs):
-##        if(PID < (-1 * MIN_SPEED)):
-##            PID = -1 * MIN_SPEED;
-##        elif(PID > MIN_SPEED):
-##            PID = MIN_SPEED;
             
         return PID;

@@ -4,6 +4,12 @@ from motor_control  import *;
 from PID_controller import *;
 from threading      import Thread;
 
+# Limit allowed for the quad to tilt:
+MAX_PITCH_ANGLE = 20;
+MAX_ROLL_ANGLE  = 20;
+MAX_YAW_ANGLE   = 180;
+
+# Quadcopter configurations (x, +, H):
 PLUS_CONFIG = 'PLUS_CONFIG';
 X_CONFIG    = 'X_CONFIG';
 QUAD_CONFIG = X_CONFIG;
@@ -89,33 +95,57 @@ class FlightController(Thread):
             # Calculate the YAW PID [NOT IMPLEMENTED]:
             yaw_PID = 0;
             
+            # Calculate and set the speed of each motor:
             self.setMotorsSpeed(self.setpoint[THROTTLE], pitch_PID, roll_PID, yaw_PID);
 
         # Clean dead ends before ending:
-        # self.controller.cleanup();
+        self.controller.cleanup();
 
     def setMotorsSpeed(self, throttle, pitch, roll, yaw):
+
+        # X CONFIG:
         if(QUAD_CONFIG == X_CONFIG):
             
-            # CW1  = Throttle + Pitch + Roll - Yaw
-            # CCW1 = Throttle + Pitch - Roll + Yaw
+            # CW1  = Throttle + Pitch + Roll - Yaw:
             spd = throttle + pitch + roll - yaw;
             self.controller.setSpeed(spd, CW1_MOTOR);
+
+            # CCW1 = Throttle + Pitch - Roll + Yaw:
             spd = throttle + pitch - roll + yaw;
             self.controller.setSpeed(spd, CW2_MOTOR);
-            # CW2  = Throttle - Pitch + Roll - Yaw
-            # CCW2 = Throttle - Pitch - Roll + Yaw
+
+            # CW2  = Throttle - Pitch + Roll - Yaw:
             spd = throttle - pitch + roll - yaw;
             self.controller.setSpeed(spd, CCW1_MOTOR);
+
+            # CCW2 = Throttle - Pitch - Roll + Yaw:
             spd = throttle - pitch - roll + yaw;
             self.controller.setSpeed(spd, CCW2_MOTOR);
+
+        # + CONFIG:
         elif(QUAD_CONFIG == PLUS_CONFIG):
-            pass;
+            
+            # CW1  = Throttle + Pitch - Yaw:
+            spd = throttle + pitch - yaw;
+            self.controller.setSpeed(spd, CW1_MOTOR);
+
+            # CCW1 = Throttle + Roll + Yaw:
+            spd = throttle + roll + yaw;
+            self.controller.setSpeed(spd, CW2_MOTOR);
+
+            # CW2  = Throttle - Pitch - Yaw:
+            spd = throttle - pitch - yaw;
+            self.controller.setSpeed(spd, CCW1_MOTOR);
+
+            # CCW2 = Throttle - Roll + Yaw:
+            spd = throttle - roll + yaw;
+            self.controller.setSpeed(spd, CCW2_MOTOR);
 
     def updateSetpoint(self, message):
-        # self.setpoint[PITCH] = message[];
-        # self.setpoint[ROLL]  = message[];
-        # self.setpoint[YAW]   = message[];
+        """ Map the received message to valid setpoint values. """
+        # self.setpoint[PITCH] = float(message['controllerRight']['y']) * MAX_PITCH_ANGLE;
+        # self.setpoint[ROLL]  = float(message['controllerRight']['x']) * MAX_ROLL_ANGLE;
+        # self.setpoint[YAW]   = float(message['controllerLeft']['x']) * MAX_YAW_ANGLE;
         
         # Read throttle value from the controller:
         value = float(message['controllerLeft']['y']);

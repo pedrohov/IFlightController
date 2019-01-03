@@ -34,17 +34,25 @@ class MotorControl():
             If no motor was passed as parameter set the same speed for all motors.
             If the speed is below MIN_SPEED or above MAX_SPEED, do nothing.
         """
-        if(speed < MIN_SPEED) or (speed > MAX_SPEED):
-            return;
+        filtered_speed = self.minMax(speed);
 
         if(motor == 0):
-            self.pi.set_servo_pulsewidth(CW1_MOTOR , speed);
-            self.pi.set_servo_pulsewidth(CW2_MOTOR , speed);
-            self.pi.set_servo_pulsewidth(CCW1_MOTOR, speed);
-            self.pi.set_servo_pulsewidth(CCW2_MOTOR, speed);
+            self.pi.set_servo_pulsewidth(CW1_MOTOR , filtered_speed);
+            self.pi.set_servo_pulsewidth(CW2_MOTOR , filtered_speed);
+            self.pi.set_servo_pulsewidth(CCW1_MOTOR, filtered_speed);
+            self.pi.set_servo_pulsewidth(CCW2_MOTOR, filtered_speed);
         else:
-            self.pi.set_servo_pulsewidth(motor, speed);
+            self.pi.set_servo_pulsewidth(motor, filtered_speed);
         return;
+
+    def minMax(self, speed):
+        """ Ajust the speed so it is between [MIN_SPEED, MAX_SPEED]. """
+        if(speed < MIN_SPEED):
+            return MIN_SPEED;
+        elif(speed > MAX_SPEED):
+            return MAX_SPEED;
+
+        return speed;
 
     def calibrate(self):
         self.pi.set_servo_pulsewidth(CW1_MOTOR , MAX_SPEED);
