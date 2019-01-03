@@ -1,4 +1,4 @@
-#from flight_controller import *;
+from flight_controller import *;
 import json;
 
 if __name__ == "__main__":
