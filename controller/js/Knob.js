@@ -11,8 +11,19 @@ function Knob(flightController, controller) {
 }
 
 Knob.prototype.update = function(x, y) {
-    this.x = x;
-    this.y = y;
+    if(x > this.controller.x + this.controller.radius)
+        this.x = this.controller.x + this.controller.radius;
+    else if(x < this.controller.x - this.controller.radius)
+        this.x = this.controller.x - this.controller.radius;
+    else
+        this.x = x;
+
+    if(y > this.controller.y + this.controller.radius)
+        this.y = this.controller.y + this.controller.radius;
+    else if(y < this.controller.y - this.controller.radius)
+        this.y = this.controller.y - this.controller.radius;
+    else
+        this.y = y;
 
     this.controller.knobOffsetX = this.centerDistanceX();
     this.controller.knobOffsetY = this.centerDistanceY();
@@ -68,4 +79,9 @@ Knob.prototype.angle = function(x, y) {
 
 	let deg = (addAngle + 180 * rad / Math.PI).toFixed(2);
 	return deg;
+}
+
+Knob.prototype.updatePosition = function(x, y) {
+    this.x = x;
+    this.y = y;
 }

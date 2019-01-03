@@ -23,15 +23,14 @@ FlightController.prototype.updateControllers = function(mouseX, mouseY) {
 
 FlightController.prototype.moveControllers = function(mouseX, mouseY) {
     // Check if the user is holding a knob:
-    if(this.controller1.knob.contains(mouseX, mouseY) && this.controller1.isSelected) {
-        // Check if the next move is inside the controller:
-        if(this.controller1.contains(mouseX, mouseY))
-            this.controller1.knob.update(mouseX - this.controller1.knob.mouseOffsetX, mouseY - this.controller1.knob.mouseOffsetY);
+    if((this.controller1.knob.contains(mouseX, mouseY) && this.controller1.isSelected) || (this.controller1.knob.isSelected)) {
+        // Update the knob position:
+        this.controller1.knob.update(mouseX - this.controller1.knob.mouseOffsetX, mouseY - this.controller1.knob.mouseOffsetY);
     }
 
-    if(this.controller2.knob.contains(mouseX, mouseY) && this.controller2.isSelected) {
-        if(this.controller2.contains(mouseX, mouseY))
-            this.controller2.knob.update(mouseX - this.controller2.knob.mouseOffsetX, mouseY - this.controller2.knob.mouseOffsetY);
+    // Also check for the right controller:
+    if((this.controller2.knob.contains(mouseX, mouseY) && this.controller2.isSelected) || (this.controller2.knob.isSelected)) {
+        this.controller2.knob.update(mouseX - this.controller2.knob.mouseOffsetX, mouseY - this.controller2.knob.mouseOffsetY);
     }
 
     // Return true if one controller is currently selected:
@@ -49,4 +48,10 @@ FlightController.prototype.getOffset = function() {
         "controllerLeft" : this.controller1.getOffset(),
         "controllerRight": this.controller2.getOffset()
     };
+}
+
+FlightController.prototype.updatePosition = function(x, y, h) {
+    this.controller1.updatePosition(20 + x, h / 2);
+    this.controller2.updatePosition(y - x - 20, h / 2);
+    this.draw();
 }

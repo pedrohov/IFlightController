@@ -26,6 +26,7 @@ class Receiver():
             try:
                 message = await websocket.recv();
                 message = json.loads(message);
+                print(message);
 
                 # Change current message:
                 self.message = message;
@@ -52,5 +53,5 @@ class Receiver():
         return msg;
         
 if __name__ == '__main__':
-    receiver = Receiver('', 8080);
+    receiver = Receiver('localhost', 8080);
     receiver.start();

@@ -30,8 +30,8 @@ class PIDcontroller():
         # integral part plus the error multiplied by its constant.
         # The integral part will only act when the error is close
         # to the setpoint (+- 3 degrees):
-        if(error > -3) and (error < 3):
-            self.I = self.I + (self.kI * error);
+        # if(error > -3) and (error < 3):
+        self.I = self.I + (self.kI * error);
         
         # The derivate is the value of the error given in the amount
         # of time passed since the last iteration:

@@ -1,15 +1,13 @@
-var piAddress = "192.168.0.101"; // Raspberry pi's IP address
-//var piAddress = "localhost";
+//var piAddress = "192.168.0.101"; // Raspberry pi's IP address
+var piAddress = "localhost";
 var piPort    = "8080";
+var socket    = null;
 
 // Main code, executed once the app finishes loading:
 $(document).ready(function() {
 
     // Get canvas and its 2d context:
     let canvas  = document.getElementById("controllers");
-
-    // Create and open a new websocket:
-    let connection = new WebSocket("ws:" + piAddress + ":" + piPort);
 
     // Resize the canvas width to fit entire screen:
     canvas.width  = window.innerWidth;
@@ -41,18 +39,25 @@ $(document).ready(function() {
         flightController.resetControllers();
     });
 
+    // Handle window resize:
+    window.addEventListener('resize', function(e) {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        flightController.updatePosition(110, canvas.width, canvas.height);
+    })
+
     // Detect mouse click:
-    window.onmousedown = function(e) {
+    window.addEventListener('mousedown', function(e) {
         e = e || window.event;
         var x = (e.pageX || e.clientX) - canvas.getBoundingClientRect().left;
         var y = (e.pageY || e.clientY) - canvas.getBoundingClientRect().top;
 
         // Check if the mouse is clicking over a knob:
         flightController.updateControllers(x, y);
-    }
+    });
 
     // Detect mouse movement:
-    window.onmousemove = function(e) {
+    window.addEventListener('mousemove', function(e) {
         e = e || window.event;
         var x = (e.pageX || e.clientX) - canvas.getBoundingClientRect().left;
         var y = (e.pageY || e.clientY) - canvas.getBoundingClientRect().top;
@@ -61,41 +66,71 @@ $(document).ready(function() {
         let changed = flightController.moveControllers(x, y);
 
         // Only send new status message if the controller changed state:
-        if(changed) {
+        if(changed && (socket !== null)) {
             let message = flightController.getOffset();
-            connection.send(JSON.stringify(message));
+            socket.send(JSON.stringify(message));
         }
-    }
+    });
 
     // Reset the controller state:
-    window.onmouseup = function(e) {
+    window.addEventListener('mouseup', function(e) {
         flightController.resetControllers();
-    }
-
-    // When the connection is open, update the connection status:
-    connection.onopen = function () {
-        // Update the controller's status:
-        $("#con-status").removeClass("disconnected");
-        $("#con-status-txt").html("Connected");
-    };
-
-    // Log errors:
-    connection.onerror = function (error) {
-        console.log('WebSocket Error: ' + error);
-        $("#con-status").addClass("disconnected");
-        $("#con-status-txt").html("Disconnected");
-    };
-
-    // Update
-    connection.onclose = function (event) {
-        console.log('WebSocket is closed');
-        $("#con-status").addClass("disconnected");
-        $("#con-status-txt").html("Disconnected");
-    };
-
-    // Log messages from the server
-    connection.onmessage = function (e) {
-        console.log('Server: ' + e.data);
-    };
+    });
 
 });
+
+function toggleConnect() {
+    let isOffline = $("#con-status").hasClass("disconnected");
+
+    // Display available connections:
+    if(isOffline) {
+        // Try to connect:
+        openWebsocket();
+
+        // If the connection was successful:
+        if(socket !== null) {
+            // Update the controller's status:
+            $("#con-status").removeClass("disconnected");
+            $("#con-status-txt").html("Connected");
+            $("#connect").html("DISCONNECT");
+        }
+    } else
+        socket.close();
+}
+
+function openWebsocket() {
+    try {
+        socket = new WebSocket("ws:" + piAddress + ":" + piPort);
+
+        // When the connection is open, update the connection status:
+        socket.onopen = function () {
+            // Update the controller's status:
+            $("#con-status").removeClass("disconnected");
+            $("#con-status-txt").html("Connected");
+        };
+
+        // Log errors:
+        socket.onerror = function (error) {
+            console.log('WebSocket Error: ' + error);
+            $("#con-status").addClass("disconnected");
+            $("#con-status-txt").html("Disconnected");
+        };
+
+        // Update
+        socket.onclose = function (event) {
+            console.log('WebSocket is closed');
+            $("#con-status").addClass("disconnected");
+            $("#con-status-txt").html("Disconnected");
+            $("#connect").html("CONNECT");
+            socket = null;
+        };
+
+        // Log messages from the server
+        socket.onmessage = function (e) {
+            console.log('Server: ' + e.data);
+        };
+
+    } catch(exception) {
+        console.log(exception);
+    }
+}

@@ -71,3 +71,9 @@ Controller.prototype.reset = function() {
     this.isSelected = false;
     this.knob.update(this.x, this.y);
 }
+
+Controller.prototype.updatePosition = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.knob.updatePosition(x, y);
+}
