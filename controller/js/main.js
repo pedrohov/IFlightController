@@ -10,8 +10,7 @@ $(document).ready(function() {
     let canvas  = document.getElementById("controllers");
 
     // Resize the canvas width to fit entire screen:
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    setCanvasSize(canvas);
 
     // Create a new flightController object:
     let flightController = new FlightController(110, canvas.width, canvas.height, canvas);
@@ -41,8 +40,7 @@ $(document).ready(function() {
 
     // Handle window resize:
     window.addEventListener('resize', function(e) {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
+        setCanvasSize(canvas);
         flightController.updatePosition(110, canvas.width, canvas.height);
     })
 
@@ -133,4 +131,11 @@ function openWebsocket() {
     } catch(exception) {
         console.log(exception);
     }
+}
+
+function setCanvasSize(canvas) {
+    canvas.width  = (window.innerWidth > 800)  ? 800 : window.innerWidth;
+    canvas.height = (window.innerHeight > 600) ? 600 : window.innerHeight;
+    $("#controllers").css('margin-left', '-' + (canvas.width  / 2) + 'px');
+    $("#controllers").css('margin-top' , '-' + (canvas.height / 2) + 'px');
 }
