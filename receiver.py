@@ -26,7 +26,6 @@ class Receiver():
             try:
                 message = await websocket.recv();
                 message = json.loads(message);
-                print(message);
 
                 # Change current message:
                 self.message = message;

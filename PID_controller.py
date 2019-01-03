@@ -43,9 +43,9 @@ class PIDcontroller():
         
         # Treat the PID value so it isn't bigger than 2000us and
         # less than 1000us (MAX and MIN calibrated for the ESCs):
-        if(PID < (-1 * MIN_SPEED)):
-            PID = -1 * MIN_SPEED;
-        elif(PID > MIN_SPEED):
-            PID = MIN_SPEED;
+##        if(PID < (-1 * MIN_SPEED)):
+##            PID = -1 * MIN_SPEED;
+##        elif(PID > MIN_SPEED):
+##            PID = MIN_SPEED;
             
         return PID;
