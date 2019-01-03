@@ -6,9 +6,6 @@ function FlightController(x, y, h, canvas) {
     this.controller2 = new Controller(this, this.context, y - x - 20, h / 2); /* x + 285 , y + 135*/
     this.controller1.draw();
     this.controller2.draw();
-
-    // Keeps track of the last move update:
-    //this.lastInteraction = 0;
 }
 
 FlightController.prototype.resetControllers = function() {

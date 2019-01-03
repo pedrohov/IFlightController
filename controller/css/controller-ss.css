@@ -115,3 +115,22 @@ canvas {
 	top: 25px;
 	right: 25px;
 }
+
+.right-header form,
+.right-header div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.right-header form {
+    margin-right: 2rem;
+}
+
+input {
+    text-align: center;
+    display: block;
+    padding: .2rem 0;
+    font-family: 'Lato', sans-serif;
+    color: #525564;
+    text-transform: lowercase;
+}

@@ -20,10 +20,6 @@ Controller.prototype.update = function(mouseX, mouseY) {
         this.knob.mouseOffsetY = mouseY - this.knob.y;
         this.draw();
     }
-    /*else {
-        this.knob.isSelected = false;
-        this.isSelected = false;
-    }*/
 }
 
 Controller.prototype.draw = function() {

@@ -1,6 +1,6 @@
 //var piAddress = "192.168.0.101"; // Raspberry pi's IP address
-var piAddress = "localhost";
-var piPort    = "8080";
+var piAddress = "";
+var piPort    = "";
 var socket    = null;
 
 // Main code, executed once the app finishes loading:
@@ -80,24 +80,19 @@ $(document).ready(function() {
 function toggleConnect() {
     let isOffline = $("#con-status").hasClass("disconnected");
 
-    // Display available connections:
-    if(isOffline) {
-        // Try to connect:
+    // Try to connect:
+    if(isOffline)
         openWebsocket();
-
-        // If the connection was successful:
-        if(socket !== null) {
-            // Update the controller's status:
-            $("#con-status").removeClass("disconnected");
-            $("#con-status-txt").html("Connected");
-            $("#connect").html("DISCONNECT");
-        }
-    } else
+    // Close connection:
+    else
         socket.close();
 }
 
 function openWebsocket() {
     try {
+        piAddress = document.getElementById('ip').value;
+        piPort    = document.getElementById('port').value;
+
         socket = new WebSocket("ws:" + piAddress + ":" + piPort);
 
         // When the connection is open, update the connection status:
@@ -105,11 +100,15 @@ function openWebsocket() {
             // Update the controller's status:
             $("#con-status").removeClass("disconnected");
             $("#con-status-txt").html("Connected");
+            $("#connect").html("DISCONNECT");
+
+            // Disable address input:
+            $('#ip').prop('disabled', true);
+            $('#port').prop('disabled', true);
         };
 
         // Log errors:
         socket.onerror = function (error) {
-            console.log('WebSocket Error: ' + error);
             $("#con-status").addClass("disconnected");
             $("#con-status-txt").html("Disconnected");
         };
@@ -117,10 +116,19 @@ function openWebsocket() {
         // Update
         socket.onclose = function (event) {
             console.log('WebSocket is closed');
+
+            // Code 1006: Abnormal Closure (https://www.iana.org/assignments/websocket/websocket.xml):
+            if(event.code === 1006)
+                alert("CONNECTION REFUSED:\nCheck if the IP:Port is correct and listening to connections.");
+
             $("#con-status").addClass("disconnected");
             $("#con-status-txt").html("Disconnected");
             $("#connect").html("CONNECT");
             socket = null;
+
+            // Enable address input:
+            $('#ip').prop('disabled', false);
+            $('#port').prop('disabled', false);
         };
 
         // Log messages from the server
