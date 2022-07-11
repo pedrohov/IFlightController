@@ -24,7 +24,7 @@ export const color = {
 };
 
 export const sizes = {
-  navbarHeight: 64,
+  navbarHeight: 50,
 };
 
 export const font = {

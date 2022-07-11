@@ -9,10 +9,16 @@ export const OuterRing = styled.div`
   background-color: rgba(0, 0, 0, 0.25);
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s, backdrop-filter 0.2s;
 
   &.active {
     background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+  }
+
+  &.active .icons {
+    opacity: 0.9;
   }
 
   &.active:before {
@@ -42,10 +48,30 @@ export const Handle = styled.div`
   cursor: pointer;
   transition: background-color 0.2s;
   touch-action: none; /* Ignore browser touch events (pan, zoom) */
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  pointer-events: all;
 
   &.active {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
   }
+
+  // &.active:before {
+  //   opacity: 0.8;
+  // }
+
+  // &:before {
+  //   width: 100%;
+  //   height: 100%;
+  //   border: 1px solid #ffbd78;
+  //   position: absolute;
+  //   content: "";
+  //   opacity: 0;
+  //   border-radius: 50%;
+  //   box-shadow: inset 0 0 8px -1px #ffbd78, 0 0 8px -1px #ffbd78;
+  //   transition: opacity 0.35s;
+  // }
 `;
 
 export const IconContainer = styled.div`
@@ -56,6 +82,7 @@ export const IconContainer = styled.div`
   opacity: 0.6;
   pointer-events: none;
   font-weight: bold;
+  transition: opacity 0.35s;
 `;
 
 export const HorizontalIcons = styled.div`

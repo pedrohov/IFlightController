@@ -67,7 +67,7 @@ const Joystick = (props) => {
   let icons;
   if (props.type == "YAW_THROTTLE") {
     icons = (
-      <IconContainer>
+      <IconContainer className="icons">
         <HorizontalIcons>
           <Icon>360</Icon>
           <Icon style={{ transform: "scaleX(-1)" }}>360</Icon>
@@ -80,7 +80,7 @@ const Joystick = (props) => {
     );
   } else {
     icons = (
-      <IconContainer>
+      <IconContainer className="icons">
         <HorizontalIcons>
           <Icon>chevron_left</Icon>
           <Icon>chevron_right</Icon>
@@ -95,12 +95,13 @@ const Joystick = (props) => {
 
   return (
     <OuterRing ref={outerRingRef} className={isDragging ? "active" : ""}>
+      {icons}
       <Handle
         className={isDragging ? "active" : ""}
-        onPointerDown={dragStart}
         style={{ left: position.x, top: position.y }}
+        onContextMenu={(e) => e.preventDefault()}
+        onPointerDown={dragStart}
       />
-      {icons}
     </OuterRing>
   );
 };

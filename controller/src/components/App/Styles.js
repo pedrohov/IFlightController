@@ -5,4 +5,6 @@ export const JoystickArea = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 100%;
+  pointer-events: none;
+  user-select: none;
 `;

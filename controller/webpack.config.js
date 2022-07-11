@@ -13,6 +13,15 @@ module.exports = {
         exclude: /node_modules/,
         use: "babel-loader",
       },
+      {
+        test: /\.(jpe?g|png|gif|woff2?|eot|ttf|otf|svg)$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: { limit: 15000 },
+          },
+        ],
+      },
     ],
   },
   resolve: {

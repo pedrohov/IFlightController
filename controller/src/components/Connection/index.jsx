@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Connection extends Component {
-  render() {
-    return <div />;
-  }
-}
+const Connection = () => {
+  return <div />;
+};
 
 export default Connection;
