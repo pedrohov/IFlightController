@@ -14,6 +14,11 @@ module.exports = {
         use: "babel-loader",
       },
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: "ts-loader",
+      },
+      {
         test: /\.(jpe?g|png|gif|woff2?|eot|ttf|otf|svg)$/,
         use: [
           {
@@ -27,7 +32,7 @@ module.exports = {
   resolve: {
     // allows absolute imports from "src"
     modules: [path.join(__dirname, "src"), "node_modules"],
-    extensions: ["", ".js", ".jsx"],
+    extensions: ["", ".js", ".jsx", ".ts", ".tsx"],
   },
   plugins: [
     new HtmlWebpackPlugin({ template: path.join(__dirname, "src/index.html") }),

@@ -1,5 +1,6 @@
 import Icon from "@mui/material/Icon";
 import React, { useEffect, useRef, useState } from "react";
+import { JoystickMode } from "shared/constants/rotation";
 import {
   Handle,
   HorizontalIcons,
@@ -65,7 +66,7 @@ const Joystick = (props) => {
   }, [dragEnd, drag, outerRingRef.current]);
 
   let icons;
-  if (props.type == "YAW_THROTTLE") {
+  if (props.type == JoystickMode.YAW_THROTTLE) {
     icons = (
       <IconContainer className="icons">
         <HorizontalIcons>
