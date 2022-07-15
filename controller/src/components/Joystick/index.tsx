@@ -1,6 +1,6 @@
 import Icon from "@mui/material/Icon";
 import React, { useEffect, useRef, useState } from "react";
-import { JoystickMode } from "shared/constants/rotation";
+import { JoystickMode } from "../../shared/constants/rotation";
 import {
   Handle,
   HorizontalIcons,
@@ -9,15 +9,21 @@ import {
   VerticalIcons,
 } from "./Styles";
 
-const Joystick = (props) => {
+export interface JoystickProps {
+  type: JoystickMode;
+  onMove: (x: number, y: number) => any;
+}
+
+const Joystick = (props: JoystickProps) => {
   const [diffX, setDiffX] = useState(0);
   const [diffY, setDiffY] = useState(0);
   const [radius, setRadius] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const outerRingRef = useRef(null);
+  const outerRingRef = useRef<HTMLDivElement>();
 
   const dragEnd = () => {
+    props.onMove(0, 0);
     setIsDragging(false);
     setPosition({
       x: 0,
@@ -50,6 +56,7 @@ const Joystick = (props) => {
         : Math.max(event.screenY - diffY, limitY);
 
     setPosition({ x, y });
+    props.onMove(x / radius, -y / radius);
   };
 
   useEffect(() => {
@@ -58,7 +65,6 @@ const Joystick = (props) => {
     setRadius(
       outerRingRef.current ? outerRingRef.current.offsetWidth * 0.5 : 0
     );
-
     return () => {
       document.removeEventListener("pointerup", dragEnd);
       document.removeEventListener("pointermove", drag);

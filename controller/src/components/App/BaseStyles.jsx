@@ -11,7 +11,7 @@ export default createGlobalStyle`
     margin: 0;
   }
   body {
-    color: ${color.textDarkest};
+    color: rgba(0,0,0,.84);
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
     ${font.size(16)}
@@ -71,16 +71,6 @@ export default createGlobalStyle`
   }
   [role="button"], button, input, textarea {
     appearance: none;
-  }
-  select:-moz-focusring {
-    color: transparent;
-    text-shadow: 0 0 0 #000;
-  }
-  select::-ms-expand {
-    display: none;
-  }
-  select option {
-    color: ${color.textDarkest};
   }
   p {
     line-height: 1.4285;
