@@ -5,6 +5,8 @@
 const i2c = require("i2c-bus");
 
 const MPU9250_ADDR = 0x68; // to locate the address: sudo i2cdetect -y 1
+const AK8963_ADDR = 0x0c;
+
 const PWR_MGMT_1 = 0x6b,
   SMPLRT_DIV = 0x6b,
   CONFIG = 0x1a,
@@ -18,6 +20,14 @@ const GYRO_XOUT_H = 0x43,
   GYRO_YOUT_H = 0x45,
   GYRO_ZOUT_H = 0x47;
 
+const AK8963_CNTL = 0x0a,
+  AK8963_ST2 = 0x09,
+  AK8963_ASAX = 0x10;
+const HXH = 0x04,
+  HYH = 0x06,
+  HZH = 0x08;
+const MAGNETOMETER_SENSITIVITY = 4900; // 4800 uT
+
 const TWO_TO_POWER_15 = 2 ** 15;
 
 function sleep(ms) {
@@ -29,7 +39,20 @@ function readRawBits(register) {
   low = i2c1.readByteSync(MPU9250_ADDR, register + 1);
 
   // Combine high and low for unsigned bit value:
-  value = (high << 8) | low;
+  let value = (high << 8) | low;
+
+  // Convert to +- value:
+  if (value > 32768) value -= 65536;
+
+  return value;
+}
+
+function AK8963reader(register) {
+  low = i2c1.readByteSync(AK8963_ADDR, register - 1);
+  high = i2c1.readByteSync(AK8963_ADDR, register);
+
+  // Combine high and low for unsigned bit value:
+  let value = (high << 8) | low;
 
   // Convert to +- value:
   if (value > 32768) value -= 65536;
@@ -41,19 +64,19 @@ async function start() {
   // Change sample rate. Sample rate = 8 kHz / (1 + sampleRateDiv):
   let sampleRateDiv = 0;
   i2c1.writeByteSync(MPU9250_ADDR, SMPLRT_DIV, sampleRateDiv);
-  sleep(100);
+  await sleep(100);
 
   // Reset all sensors:
   i2c1.writeByteSync(MPU9250_ADDR, PWR_MGMT_1, 0x00);
-  sleep(100);
+  await sleep(100);
 
   // Power management / crystal settings:
   i2c1.writeByteSync(MPU9250_ADDR, PWR_MGMT_1, 0x01);
-  sleep(100);
+  await sleep(100);
 
   // Write to configuration register:
   i2c1.writeByteSync(MPU9250_ADDR, CONFIG, 0);
-  sleep(100);
+  await sleep(100);
 
   // Write to Gyro configuration register:
   gyroConfigSel = [0b00000, 0b010000, 0b10000, 0b11000];
@@ -64,7 +87,7 @@ async function start() {
     GYRO_CONFIG,
     parseInt(gyroConfigSel[gyroIdx])
   );
-  sleep(100);
+  await sleep(100);
 
   // Write to Accel configuration register:
   accelConfigSel = [0b00000, 0b01000, 0b10000, 0b11000];
@@ -75,11 +98,21 @@ async function start() {
     ACCEL_CONFIG,
     parseInt(accelConfigSel[accelIdx])
   );
-  sleep(100);
+  await sleep(100);
 
   // Interrupt register (allow overflow of data FIFO):
   i2c1.writeByteSync(MPU9250_ADDR, INT_ENABLE, 1);
-  sleep(100);
+  await sleep(100);
+
+  // Start AK8963:
+  i2c1.writeByteSync(AK8963_ADDR, AK8963_CNTL, 0x00);
+  await sleep(100);
+  const AK8963bitRes = 0b0001; // 0b0001 = 16-bit
+  const AK8963sampRate = 0b0110; // 0b0010 = 8 Hz, 0b0110 = 100 Hz
+  const AK8963mode = (AK8963bitRes << 4) + AK8963sampRate; // bit conversion
+  i2c1.writeByteSync(AK8963_ADDR, AK8963_CNTL, AK8963mode);
+  await sleep(100);
+
   return {
     gyroSens: gyroConfigVals[gyroIdx],
     accelSens: accelConfigVals[accelIdx],
@@ -110,6 +143,29 @@ function conv() {
   };
 }
 
+function AK8963conv() {
+  let magX, magY, magZ;
+  while (true) {
+    magX = AK8963reader(HXH);
+    magY = AK8963reader(HYH);
+    magZ = AK8963reader(HZH);
+    if (i2c1.readByteSync(AK8963_ADDR, AK8963_ST2) == 0b10000) break;
+  }
+
+  const magnitudeX = (magX / TWO_TO_POWER_15) * MAGNETOMETER_SENSITIVITY;
+  const magnitudeY = (magY / TWO_TO_POWER_15) * MAGNETOMETER_SENSITIVITY;
+  const magnitudeZ = (magZ / TWO_TO_POWER_15) * MAGNETOMETER_SENSITIVITY;
+
+  return { x: magnitudeX, y: magnitudeY, z: magnitudeZ };
+}
+
+function logDebugValues(accelGyro, magnetometer) {
+  console.clear();
+  console.log(
+    `ACCE\tx: ${accelGyro.accel.x}\ty: ${accelGyro.accel.y}\tz: ${accelGyro.accel.z}\nGYRO\tx: ${accelGyro.gyro.x}\ty: ${accelGyro.gyro.y}\tz: ${accelGyro.gyro.z}\nMAGN\tx: ${magnetometer.x}\ty: ${magnetometer.y}\tz: ${magnetometer.z}`
+  );
+}
+
 async function main() {
   const sens = await start();
   accelSens = sens.accelSens;
@@ -118,8 +174,9 @@ async function main() {
   let readings;
   while (true) {
     readings = conv();
-    console.clear();
-    console.log(readings);
+    //magnetometerReadings = AK8963conv();
+    magnetometerReadings = { x: 0, y: 0, z: 0 };
+    logDebugValues(readings, magnetometerReadings);
   }
 }
 
