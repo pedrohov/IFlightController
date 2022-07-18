@@ -28,6 +28,8 @@ const HXH = 0x04,
   HZH = 0x08;
 const MAGNETOMETER_SENSITIVITY = 4900; // 4800 uT
 
+const TEMP_OUT_H = 0x41;
+
 const TWO_TO_POWER_15 = 2 ** 15;
 
 function sleep(ms) {
@@ -159,10 +161,14 @@ function AK8963conv() {
   return { x: magnitudeX, y: magnitudeY, z: magnitudeZ };
 }
 
-function logDebugValues(accelGyro, magnetometer) {
+function readTemperature() {
+  return readRawBits(TEMP_OUT_H) / 340 + 21;
+}
+
+function logDebugValues(accelGyro, magnetometer, temperature) {
   console.clear();
   console.log(
-    `ACCE\tx: ${accelGyro.accel.x}\ty: ${accelGyro.accel.y}\tz: ${accelGyro.accel.z}\nGYRO\tx: ${accelGyro.gyro.x}\ty: ${accelGyro.gyro.y}\tz: ${accelGyro.gyro.z}\nMAGN\tx: ${magnetometer.x}\ty: ${magnetometer.y}\tz: ${magnetometer.z}`
+    `ACCE\tx: ${accelGyro.accel.x}\ty: ${accelGyro.accel.y}\tz: ${accelGyro.accel.z}\nGYRO\tx: ${accelGyro.gyro.x}\ty: ${accelGyro.gyro.y}\tz: ${accelGyro.gyro.z}\nMAGN\tx: ${magnetometer.x}\ty: ${magnetometer.y}\tz: ${magnetometer.z}\nTEMP\t${temperature}`
   );
 }
 
@@ -171,12 +177,13 @@ async function main() {
   accelSens = sens.accelSens;
   gyroSens = sens.gyroSens;
 
-  let readings;
+  let readings, temperature, magnetometerReadings;
   while (true) {
     readings = conv();
     //magnetometerReadings = AK8963conv();
+    temperature = readTemperature();
     magnetometerReadings = { x: 0, y: 0, z: 0 };
-    logDebugValues(readings, magnetometerReadings);
+    logDebugValues(readings, magnetometerReadings, temperature);
   }
 }
 
