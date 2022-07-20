@@ -1,0 +1,29 @@
+const MPU9250 = {
+  MPU9250_ADDR: 0x68, // to locate the address: sudo i2cdetect -y 1
+  AK8963_ADDR: 0x0c,
+
+  PWR_MGMT_1: 0x6b,
+  SMPLRT_DIV: 0x6b,
+  CONFIG: 0x1a,
+  GYRO_CONFIG: 0x1b,
+  ACCEL_CONFIG: 0x1c,
+  INT_ENABLE: 0x38,
+  ACCEL_XOUT_H: 0x3b,
+  ACCEL_YOUT_H: 0x3d,
+  ACCEL_ZOUT_H: 0x3f,
+  GYRO_XOUT_H: 0x43,
+  GYRO_YOUT_H: 0x45,
+  GYRO_ZOUT_H: 0x47,
+
+  AK8963_CNTL: 0x0a,
+  AK8963_ST2: 0x09,
+  AK8963_ASAX: 0x10,
+  HXH: 0x04,
+  HYH: 0x06,
+  HZH: 0x08,
+  MAGNETOMETER_SENSITIVITY: 4900, // 4800 uT
+
+  TEMP_OUT_H: 0x41,
+};
+
+module.exports = MPU9250;
