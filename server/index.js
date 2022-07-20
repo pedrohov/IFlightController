@@ -1,5 +1,5 @@
 require("dotenv").config();
-const Mpu9250 = require("imu/mpu9250");
+const Mpu9250 = require("./imu/mpu9250");
 const Websocket = require("ws");
 
 const onError = (ws, err) => {

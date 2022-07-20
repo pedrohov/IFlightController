@@ -104,9 +104,9 @@ Mpu9250.prototype.start = async function () {
 };
 
 Mpu9250.prototype.readAccelerometer = function () {
-  const accX = readRawBits(mpu9250.ACCEL_XOUT_H);
-  const accY = readRawBits(mpu9250.ACCEL_YOUT_H);
-  const accZ = readRawBits(mpu9250.ACCEL_ZOUT_H);
+  const accX = this.readRawBits(mpu9250.ACCEL_XOUT_H);
+  const accY = this.readRawBits(mpu9250.ACCEL_YOUT_H);
+  const accZ = this.readRawBits(mpu9250.ACCEL_ZOUT_H);
 
   // Convert to acceleration and degrees per second:
   const accelerationX = (accX / TWO_TO_POWER_15) * this.accelSens;
@@ -117,9 +117,9 @@ Mpu9250.prototype.readAccelerometer = function () {
 };
 
 Mpu9250.prototype.readGyroscope = function () {
-  const gyroX = readRawBits(mpu9250.GYRO_XOUT_H);
-  const gyroY = readRawBits(mpu9250.GYRO_YOUT_H);
-  const gyroZ = readRawBits(mpu9250.GYRO_ZOUT_H);
+  const gyroX = this.readRawBits(mpu9250.GYRO_XOUT_H);
+  const gyroY = this.readRawBits(mpu9250.GYRO_YOUT_H);
+  const gyroZ = this.readRawBits(mpu9250.GYRO_ZOUT_H);
 
   const gyroRotX = (gyroX / TWO_TO_POWER_15) * this.gyroSens;
   const gyroRotY = (gyroY / TWO_TO_POWER_15) * this.gyroSens;
@@ -129,9 +129,9 @@ Mpu9250.prototype.readGyroscope = function () {
 };
 
 Mpu9250.prototype.readMagnetometer = function () {
-  const magX = AK8963reader(mpu9250.HXH);
-  const magY = AK8963reader(mpu9250.HYH);
-  const magZ = AK8963reader(mpu9250.HZH);
+  const magX = this.AK8963reader(mpu9250.HXH);
+  const magY = this.AK8963reader(mpu9250.HYH);
+  const magZ = this.AK8963reader(mpu9250.HZH);
 
   const magnitudeX =
     (magX / TWO_TO_POWER_15) * mpu9250.MAGNETOMETER_SENSITIVITY;
@@ -144,7 +144,7 @@ Mpu9250.prototype.readMagnetometer = function () {
 };
 
 Mpu9250.prototype.readTemperature = function () {
-  return readRawBits(mpu9250.TEMP_OUT_H) / 340 + 21;
+  return this.readRawBits(mpu9250.TEMP_OUT_H) / 340 + 21;
 };
 
 Mpu9250.prototype.logDebugValues = function (
