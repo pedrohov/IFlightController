@@ -1,8 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
-import { color, font } from "shared/utils/styles";
-
-import backgroundImg from "assets/images/placeholder.jpg";
+import { font } from "shared/utils/styles";
 
 export default createGlobalStyle`
   html, body {
@@ -16,11 +14,9 @@ export default createGlobalStyle`
     line-height: 1.2;
     ${font.size(16)}
     ${font.regular}
-    // background: #355C7D;  /* fallback for old browsers */
-    // background: -webkit-linear-gradient(to top, #C06C84, #6C5B7B, #355C7D);  /* Chrome 10-25, Safari 5.1-6 */
-    // background: linear-gradient(to bottom, #C06C84, #6C5B7B, #355C7D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: url(${backgroundImg}) no-repeat left;
-    background-size: cover;
+    background: #355C7D;  
+    background: -webkit-linear-gradient(to bottom, #81bfbc,#355C7D); 
+    background: linear-gradient(to bottom,#81bfbc,#355C7D);
   }
   #root {
     display: flex;

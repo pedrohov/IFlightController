@@ -18,12 +18,23 @@ const Joystick = (props: JoystickProps) => {
   const [diffX, setDiffX] = useState(0);
   const [diffY, setDiffY] = useState(0);
   const [radius, setRadius] = useState(0);
+  const [pointerId, setPointerId] = useState(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const outerRingRef = useRef<HTMLDivElement>();
 
-  const dragEnd = () => {
+  const dragStart = (event) => {
+    setPointerId(event.pointerId);
+    event.preventDefault();
+    setIsDragging(true);
+    setDiffX(event.screenX);
+    setDiffY(event.screenY);
+  };
+
+  const dragEnd = (event) => {
+    if (event.pointerId != pointerId) return;
     props.onMove(0, 0);
+    setPointerId(null);
     setIsDragging(false);
     setPosition({
       x: 0,
@@ -31,15 +42,8 @@ const Joystick = (props: JoystickProps) => {
     });
   };
 
-  const dragStart = (event) => {
-    event.preventDefault();
-    setIsDragging(true);
-    setDiffX(event.screenX);
-    setDiffY(event.screenY);
-  };
-
   const drag = (event) => {
-    if (!isDragging) return;
+    if (!isDragging || event.pointerId != pointerId) return;
     let x = event.screenX - diffX;
     let y = event.screenY - diffY;
     const angle = Math.atan2(y, x);
