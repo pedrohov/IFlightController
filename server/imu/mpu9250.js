@@ -4,12 +4,10 @@
 
 const i2c = require("i2c-bus");
 const mpu9250 = require("../constants/mpu9250");
+const { sleep } = require("../utils");
 
 const TWO_TO_POWER_15 = 2 ** 15;
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 function Mpu9250() {
   this.bus = i2c.openSync(1);
   this.accelSens = 0;
