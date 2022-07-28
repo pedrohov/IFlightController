@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { JoystickMode, Rotation } from "../../shared/constants/rotation";
 import { onMessage, sendMessage } from "../../shared/websocket";
 import AppBar from "../AppBar";
@@ -7,18 +7,33 @@ import BaseStyles from "./BaseStyles";
 import { JoystickArea } from "./Styles";
 
 const App = () => {
+  const [rotation, setRotation] = useState({
+    [Rotation.THROTTLE]: 0,
+    [Rotation.YAW]: 0,
+    [Rotation.PITCH]: 0,
+    [Rotation.ROLL]: 0,
+  });
+
   const onYawThrottleChange = (yaw: number, throttle: number) => {
-    sendMessage({
+    const updatedRotation = {
       [Rotation.THROTTLE]: throttle,
       [Rotation.YAW]: yaw,
-    });
+      [Rotation.PITCH]: rotation.PITCH,
+      [Rotation.ROLL]: rotation.ROLL,
+    };
+    setRotation(updatedRotation);
+    sendMessage(updatedRotation);
   };
 
   const onRollPitchChange = (pitch: number, roll: number) => {
-    sendMessage({
+    const updatedRotation = {
+      [Rotation.THROTTLE]: rotation.THROTTLE,
+      [Rotation.YAW]: rotation.YAW,
       [Rotation.PITCH]: pitch,
       [Rotation.ROLL]: roll,
-    });
+    };
+    setRotation(updatedRotation);
+    sendMessage(updatedRotation);
   };
 
   useEffect(() => {

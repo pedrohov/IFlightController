@@ -31,39 +31,39 @@ const Joystick = (props: JoystickProps) => {
     setDiffY(event.screenY);
   };
 
-  const dragEnd = (event) => {
-    if (event.pointerId != pointerId) return;
-    props.onMove(0, 0);
-    setPointerId(null);
-    setIsDragging(false);
-    setPosition({
-      x: 0,
-      y: 0,
-    });
-  };
-
-  const drag = (event) => {
-    if (!isDragging || event.pointerId != pointerId) return;
-    let x = event.screenX - diffX;
-    let y = event.screenY - diffY;
-    const angle = Math.atan2(y, x);
-    const limitX = radius * Math.cos(angle);
-    const limitY = radius * Math.sin(angle);
-
-    x =
-      limitX > 0
-        ? Math.min(event.screenX - diffX, limitX)
-        : Math.max(event.screenX - diffX, limitX);
-    y =
-      limitY > 0
-        ? Math.min(event.screenY - diffY, limitY)
-        : Math.max(event.screenY - diffY, limitY);
-
-    setPosition({ x, y });
-    props.onMove(x / radius, -y / radius);
-  };
-
   useEffect(() => {
+    const dragEnd = (event) => {
+      if (event.pointerId != pointerId) return;
+      props.onMove(0, 0);
+      setPointerId(null);
+      setIsDragging(false);
+      setPosition({
+        x: 0,
+        y: 0,
+      });
+    };
+
+    const drag = (event) => {
+      if (!isDragging || event.pointerId != pointerId) return;
+      let x = event.screenX - diffX;
+      let y = event.screenY - diffY;
+      const angle = Math.atan2(y, x);
+      const limitX = radius * Math.cos(angle);
+      const limitY = radius * Math.sin(angle);
+
+      x =
+        limitX > 0
+          ? Math.min(event.screenX - diffX, limitX)
+          : Math.max(event.screenX - diffX, limitX);
+      y =
+        limitY > 0
+          ? Math.min(event.screenY - diffY, limitY)
+          : Math.max(event.screenY - diffY, limitY);
+
+      setPosition({ x, y });
+      props.onMove(x / radius, -y / radius);
+    };
+
     document.addEventListener("pointerup", dragEnd);
     document.addEventListener("pointermove", drag);
     setRadius(
@@ -73,7 +73,7 @@ const Joystick = (props: JoystickProps) => {
       document.removeEventListener("pointerup", dragEnd);
       document.removeEventListener("pointermove", drag);
     };
-  }, [dragEnd, drag, outerRingRef.current]);
+  }, [dragStart, outerRingRef.current]);
 
   let icons;
   if (props.type == JoystickMode.YAW_THROTTLE) {
