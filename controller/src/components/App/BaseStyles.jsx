@@ -23,26 +23,14 @@ export default createGlobalStyle`
     flex-direction: column;
     height: 100%
   }
+  * {
+    box-sizing: border-box;
+  }
   button,
   input,
-  optgroup,
   select,
   textarea {
     ${font.regular}
-  }
-  *, *:after, *:before, input[type="search"] {
-    box-sizing: border-box;
-  }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  ul {
-    list-style: none;
-  }
-  ul, li, ol, dd, h1, h2, h3, h4, h5, h6, p {
-    padding: 0;
-    margin: 0;
   }
   h1, h2, h3, h4, h5, h6, strong {
     ${font.bold}
@@ -51,34 +39,17 @@ export default createGlobalStyle`
     background: none;
     border: none;
   }
-  /* Workaround for IE11 focus highlighting for select elements */
-  select::-ms-value {
-    background: none;
-    color: #42413d;
-  }
-  [role="button"], button, input, select, textarea {
-    outline: none;
-    &:focus {
-      outline: none;
-    }
-    &:disabled {
-      opacity: 1;
-    }
-  }
-  [role="button"], button, input, textarea {
-    appearance: none;
-  }
   p {
-    line-height: 1.4285;
+    line-height: 1.5;
   }
   textarea {
-    line-height: 1.4285;
+    line-height: 1.5;
   }
   body, select {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   html {
-    touch-action: manipulation;
+    touch-action: none;
   }
 `;
