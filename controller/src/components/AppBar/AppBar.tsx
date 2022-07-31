@@ -1,5 +1,5 @@
 import Icon from "@mui/material/Icon";
-import React from "react";
+import React, { Fragment } from "react";
 import { AppBarBackground, LeftMenu, RightMenu } from "./Styles";
 
 export interface AppBarProps {
@@ -10,14 +10,18 @@ const AppBar = (props: AppBarProps) => {
   return (
     <AppBarBackground>
       <LeftMenu>
-        <Icon fontSize="small" className="material-icons-outlined">
-          sim_card
-        </Icon>
-        <span>1.2/4GB</span>
+        {props.isConnected && (
+          <Fragment>
+            <Icon fontSize="small" className="material-icons-outlined">
+              sim_card
+            </Icon>
+            <span>1.2/4GB</span>
+          </Fragment>
+        )}
       </LeftMenu>
       <RightMenu>
         <Icon fontSize="small">{props.isConnected ? "wifi" : "wifi_off"}</Icon>
-        <Icon fontSize="small">battery_4_bar</Icon>
+        {props.isConnected && <Icon fontSize="small">battery_4_bar</Icon>}
         <Icon fontSize="small">settings</Icon>
       </RightMenu>
     </AppBarBackground>

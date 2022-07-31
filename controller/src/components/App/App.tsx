@@ -4,13 +4,14 @@ import Connection from "../../shared/connection";
 import AppBar from "../AppBar";
 import Joystick from "../Joystick";
 import BaseStyles from "./BaseStyles";
-import { JoystickArea } from "./Styles";
+import { ConnectArea, JoystickArea } from "./Styles";
+import Button from "../../shared/components/Button";
 
 const App = () => {
   const [connection, setConnection] = useState<null | Connection>(null);
   const [connectionStatus, setConnectionStatus] = useState(false);
 
-  useEffect(() => {
+  const connect = () => {
     const newConnection = new Connection();
     setConnection(newConnection);
     newConnection.onOpen(() => {
@@ -20,6 +21,10 @@ const App = () => {
       setConnectionStatus(false);
     });
     newConnection.onMessage((event: MessageEvent) => console.log(event.data));
+  };
+
+  useEffect(() => {
+    connect();
   }, []);
 
   const [rotation, setRotation] = useState({
@@ -51,10 +56,19 @@ const App = () => {
     connection?.sendMessage(updatedRotation);
   };
 
+  const onClickConnect = () => {
+    !connectionStatus && connect();
+  };
+
   return (
     <Fragment>
       <BaseStyles />
       <AppBar isConnected={connectionStatus} />
+      {!connectionStatus && (
+        <ConnectArea>
+          <Button onClick={onClickConnect}>Connect</Button>
+        </ConnectArea>
+      )}
       <JoystickArea>
         <Joystick
           type={JoystickMode.YAW_THROTTLE}
