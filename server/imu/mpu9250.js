@@ -145,6 +145,15 @@ Mpu9250.prototype.readTemperature = function () {
   return this.readRawBits(mpu9250.TEMP_OUT_H) / 340 + 21;
 };
 
+Mpu9250.prototype.read = function () {
+  return {
+    accelerometer: this.readAccelerometer(),
+    gyroscope: this.readGyroscope(),
+    magnetometer: this.readMagnetometer(),
+    temperature: this.readTemperature(),
+  };
+};
+
 Mpu9250.prototype.logDebugValues = function (
   accelGyro,
   magnetometer,
