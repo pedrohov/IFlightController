@@ -10,7 +10,7 @@ export enum ConnectionEvent {
 
 class Connection {
   isConnected: boolean = false;
-  callbacks: Record<ConnectionEvent, (() => {})[]> = {
+  callbacks: Record<ConnectionEvent, ((message?: any) => {})[]> = {
     [ConnectionEvent.message]: [],
     [ConnectionEvent.open]: [],
     [ConnectionEvent.close]: [],
@@ -23,6 +23,7 @@ class Connection {
     this.socket.onopen = this._onOpen.bind(this);
     this.socket.onclose = this._onClose.bind(this);
     this.socket.onerror = this._onError.bind(this);
+    this.socket.onmessage = this._onMessage.bind(this);
   }
 
   sendMessage(message: any): void {
@@ -36,7 +37,6 @@ class Connection {
 
   onMessage(callback): void {
     this.callbacks[ConnectionEvent.message].push(callback);
-    this.socket.addEventListener(ConnectionEvent.message, callback);
   }
 
   onOpen(callback): void {
@@ -68,6 +68,18 @@ class Connection {
       );
       this.callbacks[key] = [];
     });
+  }
+
+  private _onMessage(message: MessageEvent): void {
+    let parsedMessage;
+    try {
+      parsedMessage = JSON.parse(message.data);
+    } catch {
+      parsedMessage = message.data;
+    }
+    this.callbacks[ConnectionEvent.message].forEach((callback) =>
+      callback(parsedMessage)
+    );
   }
 
   private _onError(): void {}

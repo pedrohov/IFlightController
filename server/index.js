@@ -1,6 +1,7 @@
 require("dotenv").config();
 const FlightController = require("./flight-controller");
 const Websocket = require("ws");
+const checkDiskSpace = require("check-disk-space").default;
 
 let flightController = new FlightController();
 
@@ -21,8 +22,10 @@ const onMessage = (ws, data) => {
 const onConnection = (ws, req) => {
   ws.on("message", (data) => onMessage(ws, data));
   ws.on("error", (error) => onError(ws, error));
-  setInterval(() => {
-    ws.send(flightController.getPose());
+  setInterval(async () => {
+    const diskSpace = await checkDiskSpace("/");
+    const pose = flightController.getPose();
+    ws.send(JSON.stringify({ pose, diskSpace }));
   }, 100);
   console.log("New connection");
 };

@@ -20,7 +20,7 @@ const App = () => {
     newConnection.onClose(() => {
       setConnectionStatus(false);
     });
-    newConnection.onMessage((event: MessageEvent) => console.log(event.data));
+    newConnection.onMessage((message) => console.log(message));
   };
 
   useEffect(() => {
