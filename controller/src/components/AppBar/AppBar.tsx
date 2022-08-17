@@ -2,7 +2,13 @@ import Icon from "@mui/material/Icon";
 import React, { Fragment } from "react";
 import { AppBarBackground, LeftMenu, RightMenu } from "./Styles";
 
+export interface DiskSpace {
+  diskPath: string;
+  free: number;
+  size: number;
+}
 export interface AppBarProps {
+  diskSpace: DiskSpace | undefined;
   isConnected: boolean | undefined;
 }
 
@@ -10,12 +16,15 @@ const AppBar = (props: AppBarProps) => {
   return (
     <AppBarBackground>
       <LeftMenu>
-        {props.isConnected && (
+        {props.isConnected && props.diskSpace && (
           <Fragment>
             <Icon fontSize="small" className="material-icons-outlined">
               sim_card
             </Icon>
-            <span>1.2/4GB</span>
+            <span>
+              {(props.diskSpace.free / 1e9).toFixed(1)} /&nbsp;
+              {(props.diskSpace.size / 1e9).toFixed(1)} GB
+            </span>
           </Fragment>
         )}
       </LeftMenu>

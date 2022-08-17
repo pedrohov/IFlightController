@@ -10,6 +10,7 @@ import Button from "../../shared/components/Button";
 const App = () => {
   const [connection, setConnection] = useState<null | Connection>(null);
   const [connectionStatus, setConnectionStatus] = useState(false);
+  const [diskSpace, setDiskSpace] = useState(undefined);
 
   const connect = () => {
     const newConnection = new Connection();
@@ -20,7 +21,9 @@ const App = () => {
     newConnection.onClose(() => {
       setConnectionStatus(false);
     });
-    newConnection.onMessage((message) => console.log(message));
+    newConnection.onMessage((message) => {
+      setDiskSpace(message.diskSpace);
+    });
   };
 
   useEffect(() => {
@@ -63,7 +66,7 @@ const App = () => {
   return (
     <Fragment>
       <BaseStyles />
-      <AppBar isConnected={connectionStatus} />
+      <AppBar isConnected={connectionStatus} diskSpace={diskSpace} />
       {!connectionStatus && (
         <ConnectArea>
           <Button onClick={onClickConnect}>Connect</Button>
