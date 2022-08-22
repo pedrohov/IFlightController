@@ -31,6 +31,7 @@ const onConnection = (ws, req) => {
 };
 
 async function start() {
+  await flightController.start()
   const websocketServer = new Websocket.Server({
     port: process.env.PORT || 8080,
   });
