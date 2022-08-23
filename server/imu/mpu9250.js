@@ -27,7 +27,7 @@ Mpu9250.prototype.readRawBits = function (register) {
   return value;
 };
 
-Mpu9250.prototype.start = async function () {
+Mpu9250.prototype.initialize = async function () {
   // Change sample rate. Sample rate = 8 kHz / (1 + sampleRateDiv):
   let sampleRateDiv = 0;
   this.bus.writeByteSync(
