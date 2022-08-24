@@ -6,11 +6,13 @@ import Joystick from "../Joystick";
 import BaseStyles from "./BaseStyles";
 import { ConnectArea, JoystickArea } from "./Styles";
 import Button from "../../shared/components/Button";
+import RotationViewer from "../RotationViewer";
 
 const App = () => {
   const [connection, setConnection] = useState<null | Connection>(null);
   const [connectionStatus, setConnectionStatus] = useState(false);
   const [diskSpace, setDiskSpace] = useState(undefined);
+  const [quadRotation, setQuadRotation] = useState({ x: 0, y: 0 });
 
   const connect = () => {
     const newConnection = new Connection();
@@ -22,6 +24,7 @@ const App = () => {
       setConnectionStatus(false);
     });
     newConnection.onMessage((message) => {
+      setQuadRotation(message.pose);
       setDiskSpace(message.diskSpace);
     });
   };
@@ -72,6 +75,7 @@ const App = () => {
           <Button onClick={onClickConnect}>Connect</Button>
         </ConnectArea>
       )}
+      {connectionStatus && <RotationViewer {...quadRotation}></RotationViewer>}
       <JoystickArea>
         <Joystick
           type={JoystickMode.YAW_THROTTLE}

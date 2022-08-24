@@ -15,9 +15,12 @@ FlightController.prototype.start = async function () {
 };
 
 FlightController.prototype.getPose = function () {
-  this.imu.process();
   return this.imu.angles;
 };
+
+FlightController.prototype.process = function () {
+  this.imu.process()
+}
 
 FlightController.prototype.setMotorSpeed = function (speed) {
   this.motor.setSpeed(speed * MAX_VALUE);

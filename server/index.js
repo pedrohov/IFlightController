@@ -26,12 +26,17 @@ const onConnection = (ws, req) => {
     const diskSpace = await checkDiskSpace("/");
     const pose = flightController.getPose();
     ws.send(JSON.stringify({ pose, diskSpace }));
-  });
+  }, 200);
   console.log("New connection");
 };
 
 async function start() {
   await flightController.start();
+
+  setInterval(() => {
+    flightController.process()
+  });
+
   const websocketServer = new Websocket.Server({
     port: process.env.PORT || 8080,
   });

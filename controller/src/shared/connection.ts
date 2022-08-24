@@ -1,4 +1,4 @@
-const PI_ADDRESS = "localhost";
+const PI_ADDRESS = "192.168.1.100";
 const PI_PORT = "8954";
 
 export enum ConnectionEvent {
