@@ -76,6 +76,7 @@ const App = () => {
         </ConnectArea>
       )}
       {connectionStatus && <RotationViewer {...quadRotation}></RotationViewer>}
+      <RotationViewer {...quadRotation}></RotationViewer>
       <JoystickArea>
         <Joystick
           type={JoystickMode.YAW_THROTTLE}

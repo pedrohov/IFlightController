@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  RotationCoordinates,
   RotationViewerPlaceholder,
   RotationViewerShadow,
   RotationViewerWrapper,
@@ -18,6 +19,9 @@ const RotationViewer = (props: RotationViewerProps) => {
         style={{ transform: transform }}
       ></RotationViewerPlaceholder>
       <RotationViewerShadow></RotationViewerShadow>
+      <RotationCoordinates>
+        x: {props.x}, y: {props.y}
+      </RotationCoordinates>
     </RotationViewerWrapper>
   );
 };
