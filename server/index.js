@@ -34,7 +34,7 @@ async function start() {
   await flightController.start();
 
   setInterval(() => {
-    flightController.process()
+    flightController.process();
   });
 
   const websocketServer = new Websocket.Server({

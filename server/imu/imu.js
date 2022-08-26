@@ -8,8 +8,8 @@ function IMU() {
   this.mpu9250 = new Mpu9250();
   this.angles = { x: 0, y: 0 };
   this.gyroscopeRates = { x: 0, y: 0, z: 0 };
-  this.combineUpdateTimer = process.hrtime()[0] * 0.001;
-  this.gyroscopeRatesUpdateTimer = process.hrtime()[0] * 0.001;
+  this.combineUpdateTimer = process.hrtime();
+  this.gyroscopeRatesUpdateTimer = process.hrtime();
 }
 
 IMU.prototype.initialize = async function () {
@@ -18,8 +18,8 @@ IMU.prototype.initialize = async function () {
 
 IMU.prototype.processRawData = function () {
   const gyroscopeData = this.mpu9250.readGyroscope();
-  const dt =
-    (process.hrtime()[0] * 0.001 - this.gyroscopeRatesUpdateTimer) * 0.000001;
+  const deltaTimeArr = process.hrtime(this.gyroscopeRatesUpdateTimer);
+  const dt = deltaTimeArr[0] * 1e9 + deltaTimeArr[1];
 
   const rc = 1 / (160 * Math.PI); // 160 = 80Hz * 2
 
@@ -30,13 +30,14 @@ IMU.prototype.processRawData = function () {
   this.gyroscopeRates.z +=
     (dt / (rc + dt)) * (gyroscopeData.z - this.gyroscopeRates.z);
 
-  this.gyroscopeRatesUpdateTimer = process.hrtime()[0] * 0.001;
+  this.gyroscopeRatesUpdateTimer = deltaTimeArr;
 };
 
 IMU.prototype.combine = function () {
   const accelerometerData = this.mpu9250.readAccelerometer();
-  const dt = (process.hrtime()[0] * 0.001 - this.combineUpdateTimer) * 0.000001;
-  this.combineUpdateTimer = process.hrtime()[0] * 0.001;
+  const deltaTimeArr = process.hrtime(this.combineUpdateTimer);
+  const dt = deltaTimeArr[0] * 1e9 + deltaTimeArr[1];
+  this.combineUpdateTimer = deltaTimeArr;
 
   const accAngles = {
     x: Math.atan2(accelerometerData.y, accelerometerData.z) * RAD_TO_DEG,
