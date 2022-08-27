@@ -17,6 +17,13 @@ function FlightController() {
     ANGLE_X: new PID(),
     ANGLE_Y: new PID(),
   };
+
+  this.input = {
+    THROTTLE: 0,
+    ROLL: 0,
+    PITCH: 0,
+    YAW: 0,
+  };
 }
 
 FlightController.prototype.start = async function () {
@@ -27,15 +34,17 @@ FlightController.prototype.getPose = function () {
   return this.imu.angles;
 };
 
-FlightController.prototype.computePIDs = function () {
-  // TODO: Read input from the controller:
-  const input = { PITCH: 0, ROLL: 0, YAW: 0 };
-  this.pids.GYRO_RATE_X.process(input.PITCH, this.imu.gyroscopeRates.x);
-  this.pids.GYRO_RATE_Y.process(input.ROLL, this.imu.gyroscopeRates.y);
-  this.pids.GYRO_RATE_Z.process(input.YAW, this.imu.gyroscopeRates.z);
+FlightController.prototype.updateInput = function (inputReadings) {
+  this.input = inputReadings;
+};
 
-  this.pids.ANGLE_X.process(input.PITCH, this.imu.angles.x);
-  this.pids.ANGLE_Y.process(input.ROLL, this.imu.angles.y);
+FlightController.prototype.computePIDs = function () {
+  this.pids.GYRO_RATE_X.process(this.input.PITCH, this.imu.gyroscopeRates.x);
+  this.pids.GYRO_RATE_Y.process(this.input.ROLL, this.imu.gyroscopeRates.y);
+  this.pids.GYRO_RATE_Z.process(this.input.YAW, this.imu.gyroscopeRates.z);
+
+  this.pids.ANGLE_X.process(this.input.PITCH, this.imu.angles.x);
+  this.pids.ANGLE_Y.process(this.input.ROLL, this.imu.angles.y);
 };
 
 FlightController.prototype.process = function () {

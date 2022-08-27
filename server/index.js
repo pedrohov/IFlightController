@@ -12,10 +12,7 @@ const onError = (ws, err) => {
 const onMessage = (ws, data) => {
   try {
     const msgObject = JSON.parse(data.toString());
-    console.log("Message:", msgObject);
-    if (msgObject["THROTTLE"]) {
-      flightController.setMotorSpeed(msgObject["THROTTLE"]);
-    }
+    flightController.updateInput(msgObject);
   } catch {}
 };
 
