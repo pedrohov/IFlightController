@@ -9,6 +9,8 @@ function PID() {
   this.i = 0;
   this.d = 0;
 
+  this.output = 0;
+
   this.previousError = 0;
   this.sumError = 0;
   this.lastComputationTime = process.hrtime();
@@ -27,7 +29,8 @@ PID.prototype.compute = function (setpoint, processVal) {
   this.sumError += this.i;
   this.previousError = error;
 
-  return this.p + this.i + this.d;
+  this.output = this.p + this.i + this.d;
+  return this.output;
 };
 
 module.exports = PID;

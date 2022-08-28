@@ -30,4 +30,5 @@ Motor.prototype.setSpeed = function (speed) {
   this.gpio.servoWrite(Math.min(Math.max(speed, MIN_VALUE), MAX_VALUE));
 };
 
-module.exports = { Motor, MIN_VALUE, MAX_VALUE };
+export default Motor;
+module.exports = { MIN_VALUE, MAX_VALUE };
