@@ -24,7 +24,7 @@ const App = () => {
       setConnectionStatus(false);
     });
     newConnection.onMessage((message) => {
-      setQuadRotation(message.pose);
+      setQuadRotation(message.pose.angles);
       setDiskSpace(message.diskSpace);
     });
   };

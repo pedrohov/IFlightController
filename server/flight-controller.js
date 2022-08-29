@@ -38,7 +38,7 @@ FlightController.prototype.start = async function () {
 };
 
 FlightController.prototype.getPose = function () {
-  return this.imu.angles;
+  return { angles: this.imu.angles, gyroscopeRates: this.imu.gyroscopeRates };
 };
 
 FlightController.prototype.updateInput = function (inputReadings) {
