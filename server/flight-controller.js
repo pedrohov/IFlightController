@@ -86,10 +86,20 @@ FlightController.prototype.process = function () {
   this.updateMotors();
 };
 
-FlightController.prototype.calibrateMotors = function () {
-  // Testing all motors with the same signal:
-  /*console.log("Calibrating motors");
-    await motor.calibrate();*/
+FlightController.prototype.calibrateMotors = async function () {
+  console.log("Calibrating FRONT LEFT motor:");
+  await this.motors.FRONT.LEFT.calibrate();
+
+  console.log("Calibrating FRONT RIGHT motor:");
+  await this.motors.FRONT.RIGHT.calibrate();
+
+  console.log("Calibrating BACK LEFT motor:");
+  await this.motors.BACK.LEFT.calibrate();
+
+  console.log("Calibrating BACK RIGHT motor:");
+  await this.motors.BACK.RIGHT.calibrate();
+
+  console.log("Motors calibrated!");
 };
 
 module.exports = FlightController;

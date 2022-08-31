@@ -15,4 +15,21 @@ PID_CONFIG = {
   kd: 0,
 };
 
-module.exports = { MOTOR_PINS, PID_CONFIG };
+ACCELEROMETER_OFFSET = {
+  x: 0,
+  y: 0,
+  z: 0,
+};
+
+GYROSCOPE_OFFSET = {
+  x: 0,
+  y: 0,
+  z: 0,
+};
+
+module.exports = {
+  MOTOR_PINS,
+  PID_CONFIG,
+  ACCELEROMETER_OFFSET,
+  GYROSCOPE_OFFSET,
+};
