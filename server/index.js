@@ -12,7 +12,11 @@ const onError = (ws, err) => {
 const onMessage = (ws, data) => {
   try {
     const msgObject = JSON.parse(data.toString());
-    flightController.updateInput(msgObject);
+    if (msgObject["calibrate"]) {
+      flightController.calibrateMotors();
+    } else {
+      flightController.updateInput(msgObject);
+    }
   } catch {}
 };
 

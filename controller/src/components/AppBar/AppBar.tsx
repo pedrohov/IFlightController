@@ -10,6 +10,7 @@ export interface DiskSpace {
 export interface AppBarProps {
   diskSpace: DiskSpace | undefined;
   isConnected: boolean | undefined;
+  onCalibrate: () => void;
 }
 
 const AppBar = (props: AppBarProps) => {
@@ -30,7 +31,14 @@ const AppBar = (props: AppBarProps) => {
       </LeftMenu>
       <RightMenu>
         <Icon fontSize="small">{props.isConnected ? "wifi" : "wifi_off"}</Icon>
-        {props.isConnected && <Icon fontSize="small">battery_4_bar</Icon>}
+        {props.isConnected && (
+          <>
+            <Icon fontSize="small">battery_4_bar</Icon>
+            <Icon fontSize="small" onClick={props.onCalibrate}>
+              graphic_eq
+            </Icon>
+          </>
+        )}
         <Icon fontSize="small">settings</Icon>
       </RightMenu>
     </AppBarBackground>

@@ -66,17 +66,24 @@ const App = () => {
     !connectionStatus && connect();
   };
 
+  const onCalibrate = () => {
+    connection?.sendMessage({ calibrate: true });
+  };
+
   return (
     <Fragment>
       <BaseStyles />
-      <AppBar isConnected={connectionStatus} diskSpace={diskSpace} />
+      <AppBar
+        isConnected={connectionStatus}
+        diskSpace={diskSpace}
+        onCalibrate={onCalibrate}
+      />
       {!connectionStatus && (
         <ConnectArea>
           <Button onClick={onClickConnect}>Connect</Button>
         </ConnectArea>
       )}
       {connectionStatus && <RotationViewer {...quadRotation}></RotationViewer>}
-      <RotationViewer {...quadRotation}></RotationViewer>
       <JoystickArea>
         <Joystick
           type={JoystickMode.YAW_THROTTLE}
