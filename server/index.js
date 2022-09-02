@@ -5,6 +5,11 @@ const checkDiskSpace = require("check-disk-space").default;
 
 let flightController = new FlightController();
 
+const MessageParser = {
+  controller_input: (msg) => flightController.updateInput(msg),
+  calibration: (msg) => flightController.calibrateMotors(),
+};
+
 const onError = (ws, err) => {
   console.error(`Err.: ${err.message}`);
 };
@@ -12,11 +17,7 @@ const onError = (ws, err) => {
 const onMessage = (ws, data) => {
   try {
     const msgObject = JSON.parse(data.toString());
-    if (msgObject["calibrate"]) {
-      flightController.calibrateMotors();
-    } else {
-      flightController.updateInput(msgObject);
-    }
+    MessageParser[msgObject.type](msgObject);
   } catch {}
 };
 

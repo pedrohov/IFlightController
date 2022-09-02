@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { JoystickMode, Rotation } from "../../shared/constants/rotation";
+import Button from "../../shared/components/Button";
 import Connection from "../../shared/connection";
+import { MessageTypes } from "../../shared/constants/message";
+import { JoystickMode, Rotation } from "../../shared/constants/rotation";
 import AppBar from "../AppBar";
 import Joystick from "../Joystick";
+import RotationViewer from "../RotationViewer";
 import BaseStyles from "./BaseStyles";
 import { ConnectArea, JoystickArea } from "./Styles";
-import Button from "../../shared/components/Button";
-import RotationViewer from "../RotationViewer";
 
 const App = () => {
   const [connection, setConnection] = useState<null | Connection>(null);
@@ -48,7 +49,10 @@ const App = () => {
       [Rotation.ROLL]: rotation.ROLL,
     };
     setRotation(updatedRotation);
-    connection?.sendMessage(updatedRotation);
+    connection?.sendMessage({
+      ...updatedRotation,
+      type: MessageTypes.CONTROLLER_INPUT,
+    });
   };
 
   const onRollPitchChange = (pitch: number, roll: number) => {
@@ -59,7 +63,10 @@ const App = () => {
       [Rotation.ROLL]: roll,
     };
     setRotation(updatedRotation);
-    connection?.sendMessage(updatedRotation);
+    connection?.sendMessage({
+      ...updatedRotation,
+      type: MessageTypes.CONTROLLER_INPUT,
+    });
   };
 
   const onClickConnect = () => {
@@ -67,7 +74,10 @@ const App = () => {
   };
 
   const onCalibrate = () => {
-    connection?.sendMessage({ calibrate: true });
+    connection?.sendMessage({
+      type: MessageTypes.CALIBRATION,
+      calibrate: true,
+    });
   };
 
   return (
