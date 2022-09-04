@@ -9,6 +9,11 @@ MOTOR_PINS = {
   },
 };
 
+MOTOR_SPEED_VALUES = {
+  MIN: 700,
+  MAX: 2000,
+};
+
 PID_CONFIG = {
   kp: 0,
   ki: 0,
