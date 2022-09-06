@@ -3,6 +3,7 @@
  */
 
 const i2c = require("i2c-bus");
+const { ACCELEROMETER_OFFSET, GYROSCOPE_OFFSET } = require("../config");
 const mpu9250 = require("../constants/mpu9250");
 const { sleep } = require("../utils");
 
@@ -85,9 +86,12 @@ Mpu9250.prototype.readAccelerometer = function () {
   const accZ = this.readRawBits(mpu9250.ACCEL_ZOUT_H);
 
   // Convert to acceleration and degrees per second:
-  const accelerationX = (accX / TWO_TO_POWER_15) * this.accelSens;
-  const accelerationY = (accY / TWO_TO_POWER_15) * this.accelSens;
-  const accelerationZ = (accZ / TWO_TO_POWER_15) * this.accelSens;
+  const accelerationX =
+    ((accX - ACCELEROMETER_OFFSET.x) / TWO_TO_POWER_15) * this.accelSens;
+  const accelerationY =
+    ((accY - ACCELEROMETER_OFFSET.y) / TWO_TO_POWER_15) * this.accelSens;
+  const accelerationZ =
+    ((accZ - ACCELEROMETER_OFFSET.z) / TWO_TO_POWER_15) * this.accelSens;
 
   return { x: accelerationX, y: accelerationY, z: accelerationZ };
 };
@@ -97,9 +101,12 @@ Mpu9250.prototype.readGyroscope = function () {
   const gyroY = this.readRawBits(mpu9250.GYRO_YOUT_H);
   const gyroZ = this.readRawBits(mpu9250.GYRO_ZOUT_H);
 
-  const gyroRotX = (gyroX / TWO_TO_POWER_15) * this.gyroSens;
-  const gyroRotY = (gyroY / TWO_TO_POWER_15) * this.gyroSens;
-  const gyroRotZ = (gyroZ / TWO_TO_POWER_15) * this.gyroSens;
+  const gyroRotX =
+    ((gyroX - GYROSCOPE_OFFSET.x) / TWO_TO_POWER_15) * this.gyroSens;
+  const gyroRotY =
+    ((gyroY - GYROSCOPE_OFFSET.y) / TWO_TO_POWER_15) * this.gyroSens;
+  const gyroRotZ =
+    ((gyroZ - GYROSCOPE_OFFSET.z) / TWO_TO_POWER_15) * this.gyroSens;
 
   return { x: gyroRotX, y: gyroRotY, z: gyroRotZ };
 };
