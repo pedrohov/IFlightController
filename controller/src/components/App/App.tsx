@@ -12,6 +12,7 @@ import { ConnectArea, JoystickArea } from "./Styles";
 const App = () => {
   const [connection, setConnection] = useState<null | Connection>(null);
   const [connectionStatus, setConnectionStatus] = useState(false);
+  const [calibrationInProgress, setCalibrationInProgress] = useState(false);
   const [diskSpace, setDiskSpace] = useState(undefined);
   const [quadRotation, setQuadRotation] = useState({ x: 0, y: 0 });
 
@@ -25,8 +26,13 @@ const App = () => {
       setConnectionStatus(false);
     });
     newConnection.onMessage((message) => {
-      setQuadRotation(message.pose.angles);
-      setDiskSpace(message.diskSpace);
+      switch (message.type) {
+        case MessageTypes.POSE:
+          setQuadRotation(message.pose.angles);
+          setDiskSpace(message.diskSpace);
+        case MessageTypes.CALIBRATION:
+          setCalibrationInProgress(message.status == "in_progress");
+      }
     });
   };
 
@@ -87,6 +93,7 @@ const App = () => {
         isConnected={connectionStatus}
         diskSpace={diskSpace}
         onCalibrate={onCalibrate}
+        isCalibrating={calibrationInProgress}
       />
       {!connectionStatus && (
         <ConnectArea>

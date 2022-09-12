@@ -1,5 +1,6 @@
 import Icon from "@mui/material/Icon";
 import React, { Fragment } from "react";
+import IconButton from "../../shared/components/IconButton";
 import { AppBarBackground, LeftMenu, RightMenu } from "./Styles";
 
 export interface DiskSpace {
@@ -10,6 +11,7 @@ export interface DiskSpace {
 export interface AppBarProps {
   diskSpace: DiskSpace | undefined;
   isConnected: boolean | undefined;
+  isCalibrating: boolean | undefined;
   onCalibrate: () => void;
 }
 
@@ -34,9 +36,12 @@ const AppBar = (props: AppBarProps) => {
         {props.isConnected && (
           <>
             <Icon fontSize="small">battery_4_bar</Icon>
-            <Icon fontSize="small" onClick={props.onCalibrate}>
-              graphic_eq
-            </Icon>
+            <IconButton
+              disabled={props.isCalibrating}
+              onClick={props.onCalibrate}
+            >
+              <Icon fontSize="small">graphic_eq</Icon>
+            </IconButton>
           </>
         )}
         <Icon fontSize="small">settings</Icon>
