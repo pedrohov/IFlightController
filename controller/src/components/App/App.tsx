@@ -1,6 +1,8 @@
+import { ThemeProvider } from "@emotion/react";
 import React, { Fragment, useEffect, useState } from "react";
 import Connection from "../../shared/connection";
 import { MessageTypes } from "../../shared/constants/message";
+import { muiTheme } from "../../shared/utils/styles";
 import AppBar from "../AppBar";
 import ControllerView from "../ControllerView";
 import MapView from "../MapView";
@@ -64,23 +66,25 @@ const App = () => {
   return (
     <Fragment>
       <BaseStyles />
-      <AppBar
-        isConnected={connectionStatus}
-        diskSpace={diskSpace}
-        onCalibrate={onCalibrate}
-        isCalibrating={calibrationInProgress}
-      />
-      <SideMenu appView={view} toggleView={toggleView}></SideMenu>
-      <Views>
-        {view == AppViews.CONTROLLER && (
-          <ControllerView
-            connection={connection}
-            quadRotation={quadRotation}
-            onConnect={onClickConnect}
-          ></ControllerView>
-        )}
-        {view == AppViews.MAP && <MapView></MapView>}
-      </Views>
+      <ThemeProvider theme={muiTheme}>
+        <AppBar
+          isConnected={connectionStatus}
+          diskSpace={diskSpace}
+          onCalibrate={onCalibrate}
+          isCalibrating={calibrationInProgress}
+        />
+        <SideMenu appView={view} toggleView={toggleView}></SideMenu>
+        <Views>
+          {view == AppViews.CONTROLLER && (
+            <ControllerView
+              connection={connection}
+              quadRotation={quadRotation}
+              onConnect={onClickConnect}
+            ></ControllerView>
+          )}
+          {view == AppViews.MAP && <MapView></MapView>}
+        </Views>
+      </ThemeProvider>
     </Fragment>
   );
 };

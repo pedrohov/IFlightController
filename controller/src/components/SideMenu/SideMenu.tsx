@@ -9,7 +9,7 @@ const SideMenu = ({ appView, toggleView }) => {
     <SideMenuWrapper>
       <IconButton onClick={toggleView}>
         <Icon fontSize="small">
-          {appView == AppViews.CONTROLLER ? "map" : "videogame_asset"}
+          {appView == AppViews.CONTROLLER ? "map" : "close"}
         </Icon>
       </IconButton>
     </SideMenuWrapper>

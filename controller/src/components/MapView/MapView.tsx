@@ -2,8 +2,8 @@ import TileLayer from "ol/layer/Tile";
 import Map from "ol/Map";
 import OSM from "ol/source/OSM";
 import View from "ol/View";
-import TileWMS from "ol/source/TileWMS";
 import React, { useEffect, useRef, useState } from "react";
+import LayerMenu from "../LayerMenu";
 import { MapViewWrapper } from "./Styles";
 
 const MapView = (props) => {
@@ -15,22 +15,8 @@ const MapView = (props) => {
       source: new OSM(),
     });
 
-    const airports = new TileLayer({
-      source: new TileWMS({
-        url: "https://geoaisweb.decea.mil.br/geoserver/ICA/wms",
-        params: { LAYERS: "ICA:airport" },
-      }),
-    });
-
-    const heliports = new TileLayer({
-      source: new TileWMS({
-        url: "https://geoaisweb.decea.mil.br/geoserver/ICA/wms",
-        params: { LAYERS: "ICA:heliport" },
-      }),
-    });
-
     const map = new Map({
-      layers: [osm, airports, heliports],
+      layers: [osm],
       controls: [],
       view: new View({
         center: [-6500000, -1700000],
@@ -43,7 +29,12 @@ const MapView = (props) => {
     setMap(map);
   }, []);
 
-  return <MapViewWrapper ref={mapContainer}>{props.children}</MapViewWrapper>;
+  return (
+    <MapViewWrapper ref={mapContainer}>
+      <LayerMenu mapRef={map}></LayerMenu>
+      {props.children}
+    </MapViewWrapper>
+  );
 };
 
 export default MapView;
