@@ -10,7 +10,8 @@ export const LayerMenuWrapper = styled.div`
   left: 74px;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 0 14px;
+  padding: 7px 14px;
   border-radius: 8px;
+  gap: 7px;
 }
 `;
