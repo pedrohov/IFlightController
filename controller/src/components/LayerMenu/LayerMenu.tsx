@@ -37,8 +37,6 @@ const LayerMenu = ({ mapRef }: { mapRef: Map | null }) => {
       mapRef?.removeLayer(layers[layer]);
     };
 
-    mapRef?.addLayer(layers[layer]);
-
     return (
       <FormControlLabel
         label={layer}
@@ -64,6 +62,7 @@ const LayerMenu = ({ mapRef }: { mapRef: Map | null }) => {
       zIndex: 1,
     });
     mapRef?.addLayer(delimitedAreas);
+    Object.values(layers).forEach((layer) => mapRef?.addLayer(layer));
   }, [mapRef]);
 
   const drawPolygon = () => {
