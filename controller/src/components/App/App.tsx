@@ -21,7 +21,7 @@ const App = () => {
   const [calibrationInProgress, setCalibrationInProgress] = useState(false);
   const [diskSpace, setDiskSpace] = useState(undefined);
   const [quadRotation, setQuadRotation] = useState({ x: 0, y: 0 });
-  const [view, setView] = useState(AppViews.CONTROLLER);
+  const [view, setView] = useState(AppViews.MAP);
 
   const connect = () => {
     const newConnection = new Connection();

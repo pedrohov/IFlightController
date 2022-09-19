@@ -31,7 +31,7 @@ const MapView = (props) => {
 
   return (
     <MapViewWrapper ref={mapContainer}>
-      <LayerMenu mapRef={map}></LayerMenu>
+      {map && <LayerMenu mapRef={map}></LayerMenu>}
       {props.children}
     </MapViewWrapper>
   );
