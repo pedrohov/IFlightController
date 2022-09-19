@@ -38,6 +38,8 @@ export default createGlobalStyle`
   button {
     background: none;
     border: none;
+    font-size: 14px;
+    font-weight: 500;
   }
   p {
     line-height: 1.5;

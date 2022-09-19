@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 
 export const IconButtonEl = styled.button`
-  font-weight: 500;
   color: #fff;
   border-radius: 50%;
   width: 30px;

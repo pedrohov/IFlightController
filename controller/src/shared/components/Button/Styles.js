@@ -6,7 +6,6 @@ export const ButtonEl = styled.button`
   line-height: 34px;
   border-radius: 4px;
   min-width: 64px;
-  font-weight: 500;
   color: #fff;
   cursor: pointer;
   white-space: nowrap;

@@ -10,7 +10,9 @@ import Button from "../../shared/components/Button";
 import { LayerMenuWrapper } from "./Styles";
 
 const LayerMenu = ({ mapRef }: { mapRef: Map | null }) => {
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [isDrawing, setIsDrawing] = useState<null | "Polygon" | "Circle">(null);
+  const [delimitedAreasSource, setDelimitedAreasSource] =
+    useState<null | VectorSource>(null);
   const [drawInteraction, setDrawInteraction] = useState<null | Draw>(null);
 
   const layers = {
@@ -50,36 +52,49 @@ const LayerMenu = ({ mapRef }: { mapRef: Map | null }) => {
   });
 
   useEffect(() => {
-    const delimitedAreasSource = new VectorSource({ wrapX: false });
-    const newDrawInteraction = new Draw({
-      source: delimitedAreasSource,
-      type: "Polygon",
-    });
-    setDrawInteraction(newDrawInteraction);
+    const source = new VectorSource({ wrapX: false });
+    setDelimitedAreasSource(source);
 
     const delimitedAreas = new VectorLayer({
-      source: delimitedAreasSource,
+      source,
       zIndex: 1,
     });
     mapRef?.addLayer(delimitedAreas);
     Object.values(layers).forEach((layer) => mapRef?.addLayer(layer));
   }, [mapRef]);
 
-  const drawPolygon = () => {
-    if (!drawInteraction) return;
-    if (isDrawing) {
+  const drawArea = (type: "Polygon" | "Circle") => {
+    if (drawInteraction) {
       mapRef?.removeInteraction(drawInteraction);
-      setIsDrawing(false);
+    }
+
+    if (type === isDrawing) {
+      setIsDrawing(null);
       return;
     }
-    mapRef?.addInteraction(drawInteraction);
-    setIsDrawing(true);
+
+    const newDrawInteraction = new Draw({
+      source: delimitedAreasSource!,
+      type,
+    });
+    setDrawInteraction(newDrawInteraction);
+    mapRef?.addInteraction(newDrawInteraction);
+    setIsDrawing(type);
+  };
+
+  const drawPolygon = () => {
+    drawArea("Polygon");
+  };
+
+  const drawCircle = () => {
+    drawArea("Circle");
   };
 
   return (
     <LayerMenuWrapper>
       {layerElements}
-      <Button onClick={drawPolygon}>Delimit area</Button>
+      <Button onClick={drawPolygon}>Delimit area by polygon</Button>
+      <Button onClick={drawCircle}>Delimit area by circle</Button>
     </LayerMenuWrapper>
   );
 };
