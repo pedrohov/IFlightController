@@ -1,4 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
+import MuiAlert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
 import React, { Fragment, useEffect, useState } from "react";
 import Connection from "../../shared/connection";
 import { MessageTypes } from "../../shared/constants/message";
@@ -21,7 +24,8 @@ const App = () => {
   const [calibrationInProgress, setCalibrationInProgress] = useState(false);
   const [diskSpace, setDiskSpace] = useState(undefined);
   const [quadRotation, setQuadRotation] = useState({ x: 0, y: 0 });
-  const [view, setView] = useState(AppViews.MAP);
+  const [view, setView] = useState(AppViews.CONTROLLER);
+  const [openConnectionErr, setOpenConnectionErr] = useState(false);
 
   const connect = () => {
     const newConnection = new Connection();
@@ -31,6 +35,9 @@ const App = () => {
     });
     newConnection.onClose(() => {
       setConnectionStatus(false);
+    });
+    newConnection.onError(() => {
+      setOpenConnectionErr(true);
     });
     newConnection.onMessage((message) => {
       switch (message.type) {
@@ -63,6 +70,16 @@ const App = () => {
     else setView(AppViews.CONTROLLER);
   };
 
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenConnectionErr(false);
+  };
+
   return (
     <Fragment>
       <BaseStyles />
@@ -84,6 +101,24 @@ const App = () => {
           )}
           {view == AppViews.MAP && <MapView></MapView>}
         </Views>
+        <Snackbar
+          key="connection-err"
+          color="warn"
+          onClose={handleClose}
+          autoHideDuration={6000}
+          open={openConnectionErr}
+        >
+          <MuiAlert
+            severity="error"
+            action={
+              <Button color="inherit" size="small" onClick={handleClose}>
+                Ok
+              </Button>
+            }
+          >
+            Can't connect to the quadcopter
+          </MuiAlert>
+        </Snackbar>
       </ThemeProvider>
     </Fragment>
   );
