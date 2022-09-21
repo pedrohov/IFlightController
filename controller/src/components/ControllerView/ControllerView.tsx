@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "../../shared/components/Button";
 import { MessageTypes } from "../../shared/constants/message";
 import { JoystickMode, Rotation } from "../../shared/constants/rotation";
 import Joystick from "../Joystick";
 import RotationViewer from "../RotationViewer";
 import { ConnectArea, JoystickArea } from "./Styles";
+import Button from "@mui/material/Button";
 
 export const ControllerView = (props) => {
   const [rotation, setRotation] = useState({
@@ -46,7 +46,14 @@ export const ControllerView = (props) => {
     <>
       {!props.connection?.isConnected && (
         <ConnectArea>
-          <Button onClick={props.onConnect}>Connect</Button>
+          <Button
+            color="inherit"
+            variant="outlined"
+            style={{ color: "#fff" }}
+            onClick={props.onConnect}
+          >
+            Connect
+          </Button>
         </ConnectArea>
       )}
       {props.connection?.isConnected && (
