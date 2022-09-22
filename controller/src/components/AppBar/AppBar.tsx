@@ -1,6 +1,6 @@
 import Icon from "@mui/material/Icon";
 import React, { Fragment } from "react";
-import IconButton from "../../shared/components/IconButton";
+import IconButton from "@mui/material/IconButton";
 import { AppBarBackground, LeftMenu, RightMenu } from "./Styles";
 
 export interface DiskSpace {

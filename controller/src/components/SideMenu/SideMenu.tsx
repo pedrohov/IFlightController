@@ -1,8 +1,8 @@
-import React from "react";
-import { SideMenuWrapper } from "./Styles";
-import IconButton from "../../shared/components/IconButton";
 import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import React from "react";
 import { AppViews } from "../App/App";
+import { SideMenuWrapper } from "./Styles";
 
 const SideMenu = ({ appView, toggleView }) => {
   return (
