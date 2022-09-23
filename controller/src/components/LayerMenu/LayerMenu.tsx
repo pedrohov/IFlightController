@@ -21,7 +21,7 @@ const LayerMenu = ({ mapRef }: { mapRef: Map }) => {
     }),
   });
 
-  const toggleLayer = (layer, checked) => {
+  const toggleLayer = (layer: string, checked: boolean) => {
     if (checked) {
       mapRef?.addLayer(layers[layer]);
       return;
